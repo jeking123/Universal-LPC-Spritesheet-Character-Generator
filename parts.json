@@ -1,0 +1,87 @@
+{
+    "hair": {
+        "colors": [
+            "Black",
+            "Blonde",
+            "Blonde 2",
+            "Blue",
+            "Blue 2",
+            "Brown",
+            "Brunette",
+            "Brunette 2",
+            "Dark Blonde",
+            "Gray",
+            "Green",
+            "Green 2",
+            "Light Blonde",
+            "Light Blonde 2",
+            "Pink",
+            "Pink 2",
+            "Raven",
+            "Raven 2",
+            "Redhead",
+            "Ruby Red",
+            "White",
+            "White Blonde",
+            "White Blonde 2",
+            "White Cyan"
+        ],
+        "styles": {
+            "Bald": {
+                "colors": "none",
+                "short": "none"
+            },
+            "Plain": {},
+            "Short Bangs": {
+                "short": "bangsshort"
+            },
+            "Long Bangs": {
+                "short": "bangslong"
+            },
+            "Long Bangs 2": {
+                "short": "bangslong2"
+            },
+            "Bunches": {},
+            "Long": {},
+            "Longhawk": {},
+            "Loose": {},
+            "Messy": {},
+            "Messy 2": {},
+            "Mohawk": {},
+            "Page": {},
+            "Page 2": {},
+            "Parted": {},
+            "Ponytail": {},
+            "Ponytail 2": {},
+            "Princess": {},
+            "Shorthawk": {},
+            "Left Shoulder w/Braid": {
+                "short": "shoulderl"
+            },
+            "Right Shoulder w/Braid": {
+                "short": "shoulderr"
+            },
+            "Swoop": {},
+            "Unkempt": {},
+            "Sara's Hair": {
+                "colors": "none",
+                "short": "sara",
+                "sex": "female",
+                "opts": {
+                    "Bottom Layer": {
+                        "short": "bottomlayer",
+                        "file": "SaraHairBottomLayer"
+                    },
+                    "Shadow on Face": {
+                        "short": "shadow",
+                        "file": ""
+                    },
+                    "Top Layer": {
+                        "short": "toplayer",
+                        "file": ""
+                    }
+                }
+            },
+        }
+    }
+}
