@@ -1034,22 +1034,22 @@
                                                     <input type="radio" id="hair-<?php echo $short; ?>" name="hair">
                                                     <label for="hair-<?php echo $short; ?>"><?php echo $name; ?><?php echo (!empty($style->sex) ? ' <small>(' . ucfirst($style->sex) . ' only)</small>' : ''); ?></label>
                                             <?php if(!empty($style->opts)): ?>
-                                                    <ul>
-                                                        <?php foreach($style->opts as $opt => $val): ?>
-                                                            <?php
-                                                                $file    = (!empty($val->file) ? $val->file : $val->short);
-                                                                $sex     = ' data-file_male="hair/male/' . $file . '.png" data-file_female="hair/female/' . $val->file . '.png"';
-                                                                if(!empty($style->sex)) {
-                                                                    $sex = ' data-file="hair/' . $style->sex . '/' . $file . '.png"';
-                                                                }
-                                                            ?>
-                                                            <li>
-                                                                <input type="checkbox" id="hair<?php echo $short; ?>-<?php echo $val->short; ?>" name="hair<?php echo $short; ?>-<?php echo $val->short; ?>" data-required="hair=<?php echo $short; ?>"<?php echo $sex; ?> data-behind="true" data-preview_row="1">
-                                                                <label for="hair<?php echo $short; ?>-<?php echo $val->short; ?>"><?php echo $opt; ?></label>
-                                                            </li>
-                                                        <?php endforeach; ?>
-                                                    </ul>
                                                 </span>
+                                                <ul>
+                                                    <?php foreach($style->opts as $opt => $val): ?>
+                                                        <?php
+                                                            $file    = (!empty($val->file) ? $val->file : $val->short);
+                                                            $sex     = ' data-file_male="hair/male/' . $file . '.png" data-file_female="hair/female/' . $val->file . '.png"';
+                                                            if(!empty($style->sex)) {
+                                                                $sex = ' data-file="hair/' . $style->sex . '/' . $file . '.png"';
+                                                            }
+                                                        ?>
+                                                        <li>
+                                                            <input type="checkbox" id="hair<?php echo $short; ?>-<?php echo $val->short; ?>" name="hair<?php echo $short; ?>-<?php echo $val->short; ?>" data-required="hair=<?php echo $short; ?>"<?php echo $sex; ?> data-behind="true" data-preview_row="1">
+                                                            <label for="hair<?php echo $short; ?>-<?php echo $val->short; ?>"><?php echo $opt; ?></label>
+                                                        </li>
+                                                    <?php endforeach; ?>
+                                                </ul>
                                             <?php endif; ?>
                                         <?php else: ?>
                                             <span class="condensed"><?php echo $name; ?><?php echo (!empty($style->sex) ? ' <small>(' . ucfirst($style->sex) . ' only)</small>' : ''); ?></span>
