@@ -1,8 +1,7 @@
 <?php
-    $data  = file_get_contents("parts.json");
+    $data  = file_get_contents(dirname(__FILE__) . "/parts.json");
     $parts = json_decode($data);
-?>
-<!DOCTYPE html>
+?><!DOCTYPE html>
 <html lang="en-us">
     <head>
         <meta charset="utf-8">
@@ -1018,44 +1017,43 @@
                             </li>
                         </ul>
                     </li>
-                    <?php if(!empty($parts['hair']['styles'])): ?>
+                    <?php if(!empty($parts->hair->styles)): ?>
                         <li><span class="condensed">Hair</span>
                             <ul>
-                                <?php $num = 0; foreach($parts['hair']['styles'] as $name => $style): ?>
-                                    <?php
-                                        $short   = (!empty($style['short']) ? $style['short'] : str_replace(' ', '', strtolower($name)));
-                                    ?>
+                                <?php $num = 0; foreach($parts->hair->styles as $name => $style): ?>
+                                    <?php $short = (!empty($style->short) ? $style->short : str_replace(' ', '', strtolower($name))); ?>
                                     <li>
-                                        <?php if((!empty($style['colors']) && $style['colors'] == 'none') || empty($parts['hair']['colors'])): ?>
-                                            <?php if(!empty($style['opts'])): ?>
+                                        <?php if((!empty($style->colors) && $style->colors == 'none') || empty($parts->hair->colors)): ?>
+                                            <?php if(!empty($style->opts)): ?>
                                                 <span class="condensed">
                                             <?php endif; ?>
                                                     <input type="radio" id="hair-<?php echo $short; ?>" name="hair"<?php if($num < 1) { echo ' checked'; } ?>>
                                                     <label for="hair-<?php echo $short; ?>"><?php echo $name; ?></label>
-                                            <?php if(!empty($style['opts'])): ?>
-                                                    <?php foreach($style['opts'] as $opt => $val): ?>
+                                            <?php if(!empty($style->opts)): ?>
+                                                    <?php foreach($style->opts as $opt => $val): ?>
                                                         <?php
-                                                            $sex     = ' data-file_male="hair/male/' . $val['short'] . '.png" data-file_female="hair/female/' . $val['short'] . '.png"';
-                                                            if(!empty($style['sex'])) {
-                                                                $sex = ' data-file="hair/' . $style['sex'] . '/' . $val['short'] . '.png"';
+                                                            $file    = (!empty($val->file) ? $val->file : $val->short);
+                                                            $sex     = ' data-file_male="hair/male/' . $file . '.png" data-file_female="hair/female/' . $val->file . '.png"';
+                                                            if(!empty($style->sex)) {
+                                                                $sex = ' data-file="hair/' . $style->sex . '/' . $file . '.png"';
                                                             }
                                                         ?>
                                                         <li>
-                                                            <input type="checkbox" id="hair<?php echo $short; ?>-<?php echo $val['short']; ?>" name="hair<?php echo $short; ?>-<?php echo $val['short']; ?>" data-required="hair=<?php echo $short; ?>"<?php echo $sex; ?> data-behind="true" data-preview_row="1">
-                                                            <label for="hair<?php echo $short; ?>-<?php echo $val['short']; ?>">Bottom Layer</label>
+                                                            <input type="checkbox" id="hair<?php echo $short; ?>-<?php echo $val->short; ?>" name="hair<?php echo $short; ?>-<?php echo $val->short; ?>" data-required="hair=<?php echo $short; ?>"<?php echo $sex; ?> data-behind="true" data-preview_row="1">
+                                                            <label for="hair<?php echo $short; ?>-<?php echo $val->short; ?>">Bottom Layer</label>
                                                         </li>
                                                     <?php endforeach; ?>
                                                 </span>
                                             <?php endif; ?>
                                         <?php else: ?>
-                                            <span class="condensed">Plain</span>
+                                            <span class="condensed"><?php echo $name; ?></span>
                                             <ul>
-                                                <?php foreach($parts['hair']['colors'] as $color): ?>
+                                                <?php foreach($parts->hair->colors as $color): ?>
                                                     <?php
                                                         $slug  = str_replace(' ', '_', strtolower($color));
                                                         $sex     = ' data-file_male="hair/male/' . $short . '/' . $slug . '.png" data-file_female="hair/female/' . $short . '/' . $slug . '.png"';
-                                                        if(!empty($style['sex'])) {
-                                                            $sex = ' data-file="hair/' . $style['sex'] . '/' . $short . '/' . $slug . '.png"';
+                                                        if(!empty($style->sex)) {
+                                                            $sex = ' data-file="hair/' . $style->sex . '/' . $short . '/' . $slug . '.png"';
                                                         }
                                                     ?>
                                                     <li>
@@ -1067,22 +1065,6 @@
                                         <?php endif; ?>
                                     </li>
                                     <?php $num++; ?>
-                                    <li>
-                                        <span class="condensed">
-                                            <input type="radio" id="hair-sara" name="hair" data-required="sex=female">
-                                            <label for="hair-sara">Sara's Hair <small>(Female only)</small></label>
-                                        </span>
-                                        <ul>
-                                            <li>
-                                                <input type="checkbox" id="hairsara-shadow" name="hairsara-shadow" data-required="hair=sara" data-file="hair/female/SaraHairShadowOnFace.png">
-                                                <label for="hairsara-shadow">Shadow on Face</label>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" id="hairsara-toplayer" name="hairsara-toplayer" data-required="hair=sara" data-file="hair/female/SaraHairTopLayer.png">
-                                                <label for="hairsara-toplayer">Top Layer</label>
-                                            </li>
-                                        </ul>
-                                    </li>
                                 <?php endforeach; ?>
                             </ul>
                         </li>
