@@ -1017,32 +1017,36 @@
                             </li>
                         </ul>
                     </li>
-                    <?php if(!empty($parts->hair->styles)): ?>
-                        <li><span class="condensed">Hair</span>
-                            <ul>
-                                <?php $num = 0; foreach($parts->hair->styles as $name => $style): ?>
+                    <li><span class="condensed">Hair</span>
+                        <ul>
+                            <li>
+                                <input type="radio" id="hair-none" name="hair" checked>
+                                <label for="hair-none">Bald</label>
+                            </li>
+                            <?php if(!empty($parts->hair->styles)): ?>
+                                <?php foreach($parts->hair->styles as $name => $style): ?>
                                     <?php $short = (!empty($style->short) ? $style->short : str_replace(' ', '', strtolower($name))); ?>
                                     <li>
                                         <?php if((!empty($style->colors) && $style->colors == 'none') || empty($parts->hair->colors)): ?>
                                             <?php if(!empty($style->opts)): ?>
                                                 <span class="condensed">
                                             <?php endif; ?>
-                                                    <input type="radio" id="hair-<?php echo $short; ?>" name="hair"<?php if($num < 1) { echo ' checked'; } ?>>
-                                                    <label for="hair-<?php echo $short; ?>"><?php echo $name; ?></label>
+                                                <input type="radio" id="hair-<?php echo $short; ?>" name="hair">
+                                                <label for="hair-<?php echo $short; ?>"><?php echo $name; ?></label>
                                             <?php if(!empty($style->opts)): ?>
-                                                    <?php foreach($style->opts as $opt => $val): ?>
-                                                        <?php
-                                                            $file    = (!empty($val->file) ? $val->file : $val->short);
-                                                            $sex     = ' data-file_male="hair/male/' . $file . '.png" data-file_female="hair/female/' . $val->file . '.png"';
-                                                            if(!empty($style->sex)) {
-                                                                $sex = ' data-file="hair/' . $style->sex . '/' . $file . '.png"';
-                                                            }
-                                                        ?>
-                                                        <li>
-                                                            <input type="checkbox" id="hair<?php echo $short; ?>-<?php echo $val->short; ?>" name="hair<?php echo $short; ?>-<?php echo $val->short; ?>" data-required="hair=<?php echo $short; ?>"<?php echo $sex; ?> data-behind="true" data-preview_row="1">
-                                                            <label for="hair<?php echo $short; ?>-<?php echo $val->short; ?>">Bottom Layer</label>
-                                                        </li>
-                                                    <?php endforeach; ?>
+                                                <?php foreach($style->opts as $opt => $val): ?>
+                                                    <?php
+                                                        $file    = (!empty($val->file) ? $val->file : $val->short);
+                                                        $sex     = ' data-file_male="hair/male/' . $file . '.png" data-file_female="hair/female/' . $val->file . '.png"';
+                                                        if(!empty($style->sex)) {
+                                                            $sex = ' data-file="hair/' . $style->sex . '/' . $file . '.png"';
+                                                        }
+                                                    ?>
+                                                    <li>
+                                                        <input type="checkbox" id="hair<?php echo $short; ?>-<?php echo $val->short; ?>" name="hair<?php echo $short; ?>-<?php echo $val->short; ?>" data-required="hair=<?php echo $short; ?>"<?php echo $sex; ?> data-behind="true" data-preview_row="1">
+                                                        <label for="hair<?php echo $short; ?>-<?php echo $val->short; ?>"><?php echo $opt; ?></label>
+                                                    </li>
+                                                <?php endforeach; ?>
                                                 </span>
                                             <?php endif; ?>
                                         <?php else: ?>
@@ -1050,7 +1054,7 @@
                                             <ul>
                                                 <?php foreach($parts->hair->colors as $color): ?>
                                                     <?php
-                                                        $slug  = str_replace(' ', '_', strtolower($color));
+                                                        $slug    = preg_replace('/_(\d)/', '$1', str_replace(' ', '_', strtolower($color)));
                                                         $sex     = ' data-file_male="hair/male/' . $short . '/' . $slug . '.png" data-file_female="hair/female/' . $short . '/' . $slug . '.png"';
                                                         if(!empty($style->sex)) {
                                                             $sex = ' data-file="hair/' . $style->sex . '/' . $short . '/' . $slug . '.png"';
@@ -1064,25 +1068,45 @@
                                             </ul>
                                         <?php endif; ?>
                                     </li>
-                                    <?php $num++; ?>
                                 <?php endforeach; ?>
-                            </ul>
-                        </li>
-                    <?php endif; ?>
+                            <?php endif; ?>
+                        </ul>
+                    </li>
                     <li><span class="condensed">Ears</span>
                         <ul>
                             <li>
                                 <input type="radio" id="ears-none" name="ears" checked>
                                 <label for="ears-none">Default</label>
                             </li>
-                            <li>
-                                <input type="radio" id="ears-big" name="ears" data-prohibited="body=orc,body=orc_red,body=skeleton" data-file_male_light="body/male/ears/bigears_light.png" data-file_female_light="body/female/ears/bigears_light.png" data-file_male_dark="body/male/ears/bigears_dark.png" data-file_female_dark="body/female/ears/bigears_dark.png" data-file_male_dark2="body/male/ears/bigears_dark2.png" data-file_female_dark2="body/female/ears/bigears_dark2.png" data-file_male_darkelf="body/male/ears/bigears_darkelf.png" data-file_female_darkelf="body/female/ears/bigears_darkelf.png" data-file_male_darkelf2="body/male/ears/bigears_darkelf2.png" data-file_female_darkelf2="body/female/ears/bigears_darkelf2.png" data-file_male_tanned="body/male/ears/bigears_tanned.png" data-file_female_tanned="body/female/ears/bigears_tanned.png" data-file_male_tanned2="body/male/ears/bigears_tanned2.png" data-file_female_tanned2="body/female/ears/bigears_tanned2.png">
-                                <label for="ears-big">Big Ears</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="ears-elven" name="ears" data-prohibited="body=orc,body=orc_red,body=skeleton" data-file_male_light="body/male/ears/elvenears_light.png" data-file_female_light="body/female/ears/elvenears_light.png" data-file_male_dark="body/male/ears/elvenears_dark.png" data-file_female_dark="body/female/ears/elvenears_dark.png" data-file_male_dark2="body/male/ears/elvenears_dark2.png" data-file_female_dark2="body/female/ears/elvenears_dark2.png" data-file_male_darkelf="body/male/ears/elvenears_darkelf.png" data-file_female_darkelf="body/female/ears/elvenears_darkelf.png" data-file_male_darkelf2="body/male/ears/elvenears_darkelf2.png" data-file_female_darkelf2="body/female/ears/elvenears_darkelf2.png" data-file_male_tanned="body/male/ears/elvenears_tanned.png" data-file_female_tanned="body/female/ears/elvenears_tanned.png" data-file_male_tanned2="body/male/ears/elvenears_tanned2.png" data-file_female_tanned2="body/female/ears/elvenears_tanned2.png">
-                                <label for="ears-elven">Elven Ears</label>
-                            </li>
+                            <?php if(!empty($parts->body->ears)): ?>
+                                <?php foreach($parts->body->ears as $ear): ?>
+                                    <?php
+                                        $short = (!empty($ear->short) ? $ear->short : str_replace(' ', '', strtolower($ear->name)));
+                                        $colors = '';
+                                        $prohibition = '';
+                                        foreach($ear->prohibited as $color) {
+                                            if(!empty($prohibition)) {
+                                                $prohibition .= ',';
+                                            }
+                                            $prohibition .= 'body=' . $color;
+                                        }
+                                        foreach($parts->body->colors as $color) {
+                                            $body = (!empty($color->short) ? $color->short : str_replace(' ', '', strtolower($color->name)));
+                                            if(in_array($body, $ear->prohibited)) {
+                                                continue;
+                                            }
+                                            $colors .= ' data-file_male_' . $body . '="body/male/ears/' . $short . '_' . $body . '.png" data-file_female_' . $body . '="body/female/ears/' . $short . '_' . $body . '.png"';
+                                        }
+                                        if(!empty($prohibition)) {
+                                            $prohibition = ' data-prohibited="' . $prohibition . '"';
+                                        }
+                                    ?>
+                                    <li>
+                                        <input type="radio" id="ears-<?php echo $short; ?>" name="ears"<?php echo $prohibition . $colors; ?>>
+                                        <label for="ears-<?php echo $short; ?>"><?php echo $ear->name; ?></label>
+                                    </li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </ul>
                     </li>
                     <li><span class="condensed">Hats</span>

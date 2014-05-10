@@ -1,4 +1,68 @@
 {
+    "body": {
+        "colors": [
+            {
+                "name": "Light"
+            },
+            {
+                "name": "Dark"
+            },
+            {
+                "name": "Dark 2"
+            },
+            {
+                "name": "Dark Elf"
+            },
+            {
+                "name": "Dark Elf 2"
+            },
+            {
+                "name": "Tanned"
+            },
+            {
+                "name": "Tanned 2"
+            },
+            {
+                "name": "Orc"
+            },
+            {
+                "name": "Red Orc",
+                "short": "orc_red"
+            },
+            {
+                "name": "Skeleton",
+                "sex": "male"
+            }
+        ],
+        "eyes": [
+            "Blue",
+            "Brown",
+            "Gray",
+            "Green",
+            "Purple",
+            "Red",
+            "Yellow",
+            "Orange"
+        ],
+        "ears": [
+            {
+                "name": "Big Ears",
+                "prohibited": [
+                    "orc",
+                    "orc_red",
+                    "skeleton"
+                ]
+            },
+            {
+                "name": "Elven Ears",
+                "prohibited": [
+                    "orc",
+                    "orc_red",
+                    "skeleton"
+                ]
+            }
+        ]
+    },
     "hair": {
         "colors": [
             "Black",
@@ -27,10 +91,6 @@
             "White Cyan"
         ],
         "styles": {
-            "Bald": {
-                "colors": "none",
-                "short": "none"
-            },
             "Plain": {},
             "Short Bangs": {
                 "short": "bangsshort"
