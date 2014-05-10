@@ -1031,7 +1031,7 @@
                                             <?php if(!empty($style->opts)): ?>
                                                 <span class="condensed">
                                             <?php endif; ?>
-                                                    <input type="radio" id="hair-<?php echo $short; ?>" name="hair">
+                                                    <input type="radio" id="hair-<?php echo $short; ?>" name="hair"<?php echo (!empty($style->sex) ? ' data-required="sex=' . $style->sex . '"' : ''); ?>>
                                                     <label for="hair-<?php echo $short; ?>"><?php echo $name; ?><?php echo (!empty($style->sex) ? ' <small>(' . ucfirst($style->sex) . ' only)</small>' : ''); ?></label>
                                             <?php if(!empty($style->opts)): ?>
                                                 </span>
@@ -1056,10 +1056,11 @@
                                             <ul>
                                                 <?php foreach($parts->hair->colors as $color): ?>
                                                     <?php
-                                                        $slug    = preg_replace('/_(\d)/', '$1', str_replace(' ', '_', strtolower($color)));
-                                                        $sex     = ' data-file_male="hair/male/' . $short . '/' . $slug . '.png" data-file_female="hair/female/' . $short . '/' . $slug . '.png"';
+                                                        $slug     = preg_replace('/_(\d)/', '$1', str_replace(' ', '_', strtolower($color)));
+                                                        $sex      = ' data-file_male="hair/male/' . $short . '/' . $slug . '.png" data-file_female="hair/female/' . $short . '/' . $slug . '.png"';
                                                         if(!empty($style->sex)) {
-                                                            $sex = ' data-file="hair/' . $style->sex . '/' . $short . '/' . $slug . '.png"';
+                                                            $sex  = ' data-file="hair/' . $style->sex . '/' . $short . '/' . $slug . '.png"';
+                                                            $sex .= ' data-required="sex=' . $style->sex . '"';
                                                         }
                                                     ?>
                                                     <li>
