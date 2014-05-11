@@ -101,11 +101,14 @@
             "Long Bangs 2": {
                 "short": "bangslong2"
             },
+            "Bedhead": {},
             "Bunches": {},
             "Long": {},
             "Longhawk": {},
             "Loose": {},
-            "Messy": {},
+            "Messy": {
+                "short": "messy1"
+            },
             "Messy 2": {},
             "Mohawk": {},
             "Page": {},
