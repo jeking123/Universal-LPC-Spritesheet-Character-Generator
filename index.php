@@ -1056,7 +1056,7 @@
                                             <ul>
                                                 <?php foreach($parts->hair->colors as $color): ?>
                                                     <?php
-                                                        $slug     = preg_replace('/_(\d)/', '$1', str_replace(' ', '_', strtolower($color)));
+                                                        $slug     = preg_replace('/-(\d)/', '$1', str_replace(' ', '-', strtolower($color)));
                                                         $sex      = ' data-file_male="hair/male/' . $short . '/' . $slug . '.png" data-file_female="hair/female/' . $short . '/' . $slug . '.png"';
                                                         if(!empty($style->sex)) {
                                                             $sex  = ' data-file="hair/' . $style->sex . '/' . $short . '/' . $slug . '.png"';
