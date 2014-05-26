@@ -55,46 +55,43 @@
                     </li>
                     <li><span class="condensed">Body</span>
                         <ul>
-                            <li>
-                                <input type="radio" id="body-light" name="body" checked data-file_female="body/female/light.png" data-file_male="body/male/light.png" data-hs_plain_male="hair/male/plain/shadows-lightbody.png" data-hs_ponytail2_female="hair/female/ponytail2/shadows-lightbody.png">
-                                <label for="body-light">Light</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="body-dark" name="body" data-file_female="body/female/dark.png" data-file_male="body/male/dark.png" data-hs_plain_male="hair/male/plain/shadows-darkbody.png" data-hs_ponytail2_female="hair/female/ponytail2/shadows-darkbody.png">
-                                <label for="body-dark">Dark</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="body-dark2" name="body" data-file_female="body/female/dark2.png" data-file_male="body/male/dark2.png" data-hs_ponytail2_female="hair/female/ponytail2/shadows-dark2body.png">
-                                <label for="body-dark2">Dark 2</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="body-darkelf" name="body" data-file_female="body/female/darkelf.png" data-file_male="body/male/darkelf.png" data-hs_plain_male="hair/male/plain/shadows-darkelfbody.png" data-hs_ponytail2_female="hair/female/ponytail2/shadows-darkelfbody.png">
-                                <label for="body-darkelf">Dark Elf</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="body-darkelf2" name="body" data-file_female="body/female/darkelf2.png" data-file_male="body/male/darkelf2.png" data-hs_plain_male="hair/male/plain/shadows-darkelf2body.png" data-hs_ponytail2_female="hair/female/ponytail2/shadows-darkelf2body.png">
-                                <label for="body-darkelf2">Dark Elf 2</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="body-tanned" name="body" data-file_female="body/female/tanned.png" data-file_male="body/male/tanned.png" data-hs_plain_male="hair/male/plain/shadows-tannedbody.png" data-hs_ponytail2_female="hair/female/ponytail2/shadows-tannedbody.png">
-                                <label for="body-tanned">Tanned</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="body-tanned2" name="body" data-file_female="body/female/tanned2.png" data-file_male="body/male/tanned2.png" data-hs_plain_male="hair/male/plain/shadows-tanned2body.png" data-hs_ponytail2_female="hair/female/ponytail2/shadows-tanned2body.png">
-                                <label for="body-tanned2">Tanned 2</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="body-orc" name="body" data-file_female="body/female/orc.png" data-file_male="body/male/orc.png">
-                                <label for="body-orc">Orc</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="body-orc_red" name="body" data-file_female="body/female/red_orc.png" data-file_male="body/male/red_orc.png">
-                                <label for="body-orc_red">Red Orc</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="body-skeleton" name="body" data-required="sex=male" data-file="body/male/skeleton.png">
-                                <label for="body-skeleton">Skeleton <small>(Male only)</small></label>
-                            </li>
+                            <?php if(!empty($parts->body->colors)): ?>
+                                <?php foreach($parts->body->colors as $k => $color): ?>
+                                    <?php
+                                        $short    = (!empty($color->short) ? $color->short : str_replace(' ', '', strtolower($color->name)));
+                                        $file     = $short;
+                                        if(!empty($color->file)) {
+                                            $file = $color->file;
+                                        }
+
+                                        if(!empty($color->sex)) {
+                                            $sex  = ' data-required="sex=' . $color->sex . '" data-file_' . $color->sex . '="body/' . $color->sex . '/' . $file . '.png"';
+                                        }
+                                        else {
+                                            $sex  = ' data-file_female="body/female/' . $file . '.png" data-file_male="body/male/' . $file . '.png"';
+                                        }
+
+                                        $shadows  = '';
+                                        if((empty($color->shadows) || $color->shadows != 'none') && !empty($parts->hair->styles)) {
+                                            foreach($parts->hair->styles as $style) {
+                                                if(!empty($style->shadows)) {
+                                                    $hair = (!empty($style->short) ? $style->short : str_replace(' ', '', strtolower($style->name)));
+                                                    if(!empty($color->sex)) {
+                                                        $shadows = ' data-hs_' . $hair . '_' . $color->sex . '="body/' . $color->sex . '/' . $hair . '/shadows-' . $file . 'body.png"';
+                                                    }
+                                                    else {
+                                                        $shadows = ' data-hs_' . $hair . '_female="hair/female/' . $hair . '/shadows-' . $short . 'body.png" data-hs_' . $file . '_male="hair/male/' . $hair . '/shadows-' . $short . 'body.png"';
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ?>
+                                    <li>
+                                        <input type="radio" id="body-<?php echo $short; ?>" name="body"<?php echo (empty($k) ? ' checked' : ''); ?><?php echo $sex . $shadows; ?>>
+                                        <label for="body-<?php echo $short; ?>"><?php echo $color->name; ?><?php echo (!empty($color->sex) ? ' (' . ucfirst($color->sex) . ' only)' : ''); ?></label>
+                                    </li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </ul>
                     </li>
                     <li><span class="condensed">Eyes</span>
@@ -103,38 +100,24 @@
                                 <input type="radio" id="eyes-none" name="eyes" checked>
                                 <label for="eyes-none">Default</label>
                             </li>
-                            <li>
-                                <input type="radio" id="eyes-blue" name="eyes" data-file_female="body/female/eyes/blue.png" data-file_male="body/male/eyes/blue.png">
-                                <label for="eyes-blue">Blue</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="eyes_brown" name="eyes" data-file_female="body/female/eyes/brown.png" data-file_male="body/male/eyes/brown.png">
-                                <label for="eyes_brown">Brown</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="eyes_gray" name="eyes" data-file_female="body/female/eyes/gray.png" data-file_male="body/male/eyes/gray.png">
-                                <label for="eyes_gray">Gray</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="eyes-green" name="eyes" data-file_female="body/female/eyes/green.png" data-file_male="body/male/eyes/green.png">
-                                <label for="eyes-green">Green</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="eyes-purple" name="eyes" data-file_female="body/female/eyes/purple.png" data-file_male="body/male/eyes/purple.png">
-                                <label for="eyes-purple">Purple</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="eyes-red" name="eyes" data-file_female="body/female/eyes/red.png" data-file_male="body/male/eyes/red.png">
-                                <label for="eyes-red">Red</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="eyes-yellow" name="eyes" data-file_female="body/female/eyes/yellow.png" data-file_male="body/male/eyes/yellow.png">
-                                <label for="eyes-yellow">Yellow</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="eyes-orange" name="eyes" data-file_female="body/female/eyes/orange.png" data-file_male="body/male/eyes/orange.png">
-                                <label for="eyes-orange">Orange</label>
-                            </li>
+                            <?php if(!empty($parts->body->eyes)): ?>
+                                <?php foreach($parts->body->eyes as $k => $color): ?>
+                                    <?php
+                                        $short    = str_replace(' ', '', strtolower($color));
+
+                                        if(!empty($color->sex)) {
+                                            $sex  = ' data-file_' . $color->sex . '="body/' . $color->sex . '/eyes/' . $short . '.png"';
+                                        }
+                                        else {
+                                            $sex  = ' data-file_female="body/female/eyes/' . $short . '.png" data-file_male="body/male/eyes/' . $short . '.png"';
+                                        }
+                                    ?>
+                                    <li>
+                                        <input type="radio" id="eyes-<?php echo $short; ?>" name="eyes"<?php echo $sex; ?>>
+                                        <label for="eyes-<?php echo $short; ?>"><?php echo $color; ?></label>
+                                    </li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </ul>
                     </li>
                     <li><span class="condensed">Nose</span>
@@ -143,18 +126,35 @@
                                 <input type="radio" id="nose-none" name="nose" checked>
                                 <label for="nose-none">Default</label>
                             </li>
-                            <li>
-                                <input type="radio" id="nose-big" name="nose" data-prohibited="body=orc,body=orc_red,body=skeleton" data-file_male_light="body/male/nose/bignose_light.png" data-file_female_light="body/female/nose/bignose_light.png" data-file_male_dark="body/male/nose/bignose_dark.png" data-file_female_dark="body/female/nose/bignose_dark.png" data-file_male_dark2="body/male/nose/bignose_dark2.png" data-file_female_dark2="body/female/nose/bignose_dark2.png" data-file_male_darkelf="body/male/nose/bignose_darkelf.png" data-file_female_darkelf="body/female/nose/bignose_darkelf.png" data-file_male_darkelf2="body/male/nose/bignose_darkelf2.png" data-file_female_darkelf2="body/female/nose/bignose_darkelf2.png" data-file_male_tanned="body/male/nose/bignose_tanned.png" data-file_female_tanned="body/female/nose/bignose_tanned.png" data-file_male_tanned2="body/male/nose/bignose_tanned2.png" data-file_female_tanned2="body/female/nose/bignose_tanned2.png">
-                                <label for="nose-big">Big Nose</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="nose-button" name="nose" data-prohibited="body=orc,body=orc_red,body=skeleton" data-file_male_light="body/male/nose/buttonnose_light.png" data-file_female_light="body/female/nose/buttonnose_light.png" data-file_male_dark="body/male/nose/buttonnose_dark.png" data-file_female_dark="body/female/nose/buttonnose_dark.png" data-file_male_dark2="body/male/nose/buttonnose_dark2.png" data-file_female_dark2="body/female/nose/buttonnose_dark2.png" data-file_male_darkelf="body/male/nose/buttonnose_darkelf.png" data-file_female_darkelf="body/female/nose/buttonnose_darkelf.png" data-file_male_darkelf2="body/male/nose/buttonnose_darkelf2.png" data-file_female_darkelf2="body/female/nose/buttonnose_darkelf2.png" data-file_male_tanned="body/male/nose/buttonnose_tanned.png" data-file_female_tanned="body/female/nose/buttonnose_tanned.png" data-file_male_tanned2="body/male/nose/buttonnose_tanned2.png" data-file_female_tanned2="body/female/nose/buttonnose_tanned2.png">
-                                <label for="nose-button">Button Nose</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="nose-straight" name="nose" data-prohibited="body=orc,body=orc_red,body=skeleton" data-file_male_light="body/male/nose/straightnose_light.png" data-file_female_light="body/female/nose/straightnose_light.png" data-file_male_dark="body/male/nose/straightnose_dark.png" data-file_female_dark="body/female/nose/straightnose_dark.png" data-file_male_dark2="body/male/nose/straightnose_dark2.png" data-file_female_dark2="body/female/nose/straightnose_dark2.png" data-file_male_darkelf="body/male/nose/straightnose_darkelf.png" data-file_female_darkelf="body/female/nose/straightnose_darkelf.png" data-file_male_darkelf2="body/male/nose/straightnose_darkelf2.png" data-file_female_darkelf2="body/female/nose/straightnose_darkelf2.png" data-file_male_tanned="body/male/nose/straightnose_tanned.png" data-file_female_tanned="body/female/nose/straightnose_tanned.png" data-file_male_tanned2="body/male/nose/straightnose_tanned2.png" data-file_female_tanned2="body/female/nose/straightnose_tanned2.png">
-                                <label for="nose-straight">Straight Nose</label>
-                            </li>
+                            <?php if(!empty($parts->body->nose)): ?>
+                                <?php foreach($parts->body->nose as $nose): ?>
+                                    <?php
+                                        $short = (!empty($nose->short) ? $nose->short : str_replace(' ', '', strtolower($nose->name)));
+                                        $colors = '';
+                                        $prohibition = '';
+                                        foreach($nose->prohibited as $color) {
+                                            if(!empty($prohibition)) {
+                                                $prohibition .= ',';
+                                            }
+                                            $prohibition .= 'body=' . $color;
+                                        }
+                                        foreach($parts->body->colors as $color) {
+                                            $body = (!empty($color->short) ? $color->short : str_replace(' ', '', strtolower($color->name)));
+                                            if(in_array($body, $nose->prohibited)) {
+                                                continue;
+                                            }
+                                            $colors .= ' data-file_male_' . $body . '="body/male/nose/' . $short . '_' . $body . '.png" data-file_female_' . $body . '="body/female/nose/' . $short . '_' . $body . '.png"';
+                                        }
+                                        if(!empty($prohibition)) {
+                                            $prohibition = ' data-prohibited="' . $prohibition . '"';
+                                        }
+                                    ?>
+                                    <li>
+                                        <input type="radio" id="nose-<?php echo $short; ?>" name="nose"<?php echo $prohibition . $colors; ?>>
+                                        <label for="nose-<?php echo $short; ?>"><?php echo $nose->name; ?></label>
+                                    </li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </ul>
                     </li>
                     <li>
@@ -164,34 +164,106 @@
                                 <input type="radio" id="legs-none" name="legs" checked>
                                 <label for="legs-none">No Legs</label>
                             </li>
-                            <li><span class="condensed">Pants</small></span>
-                                <ul>
+                            <?php if(!empty($parts->clothes->legs)): ?>
+                                <?php foreach($parts->clothes->legs as $legs): ?>
+                                    <?php
+                                        $short = (!empty($legs->short) ? $legs->short : str_replace(' ', '', strtolower($legs->name)));
+                                        $path  = (!empty($legs->path) ? $legs->path : 'legs');
+                                        if(empty($legs->fullpath)) {
+                                            $path .= '/%SHORT%/%SEX%';
+                                        }
+                                        $path  = str_replace('%SHORT%', $short, $path);
+                                        $pathm = str_replace('%SEX%', 'male', $path);
+                                        $pathf = str_replace('%SEX%', 'female', $path);
+                                    ?>
                                     <li>
-                                        <input type="radio" id="legs-pants_magenta" name="legs" data-file_male="legs/pants/male/magenta_pants_male.png" data-file_female="legs/pants/female/magenta_pants_female.png">
-                                        <label for="legs-pants_magenta">Magenta</label>
+                                        <?php if((!empty($legs->colors) && $legs->colors == 'none') || (empty($parts->legs->colors) && empty($legs->colors))): ?>
+                                            <?php if(!empty($legs->opts)): ?>
+                                                <span class="condensed">
+                                            <?php endif; ?>
+                                                <?php
+                                                    $file    = (!empty($legs->file) ? $legs->file : $short);
+                                                    $file    = str_replace('%SHORT%', $short, $file);
+                                                    $filem   = str_replace('%SEX%', 'male', $file);
+                                                    $filef   = str_replace('%SEX%', 'female', $file);
+                                                    $sex     = '';
+                                                    if(empty($legs->opts)) {
+                                                        $sex     = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($legs->sex)) {
+                                                            $files = str_replace('%SEX%', $legs->sex, $file);
+                                                            $paths = str_replace('%SEX%', $legs->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                        }
+                                                    }
+                                                ?>
+                                                    <input type="radio" id="legs-<?php echo $short; ?>" name="legs"<?php echo (!empty($legs->sex) ? ' data-required="sex=' . $legs->sex . '"' : '') . $sex; ?>>
+                                                    <label for="legs-<?php echo $short; ?>"><?php echo $legs->name; ?><?php echo (!empty($legs->sex) ? ' <small>(' . ucfirst($legs->sex) . ' only)</small>' : ''); ?></label>
+                                            <?php if(!empty($legs->opts)): ?>
+                                                </span>
+                                                <ul>
+                                                    <?php foreach($legs->opts as $opt => $val): ?>
+                                                        <?php
+                                                            if(empty($val->short)) {
+                                                                $val->short = str_replace(' ', '', strtolower($opt));
+                                                            }
+                                                            $file    = (!empty($val->file) ? $val->file : $val->short);
+                                                            $file    = str_replace('%SHORT%', $short, $file);
+                                                            $filem   = str_replace('%SEX%', 'male', $file);
+                                                            $filef   = str_replace('%SEX%', 'female', $file);
+
+                                                            $path2   = (!empty($val->path) ? $val->path : $path);
+                                                            $path2m  = str_replace('%SEX%', 'male', $path2);
+                                                            $path2f  = str_replace('%SEX%', 'female', $path2);
+
+                                                            $sex     = ' data-file_male="' . $path2m . '/' . $filem . '.png" data-file_female="' . $path2f . '/' . $filef . '.png"';
+                                                            if(!empty($legs->sex)) {
+                                                                $files = str_replace('%SEX%', $legs->sex, $file);
+                                                                $paths = str_replace('%SEX%', $legs->sex, $path2);
+                                                                $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            }
+                                                        ?>
+                                                        <li>
+                                                            <input type="checkbox" id="legs<?php echo $short; ?>-<?php echo $val->short; ?>" name="legs<?php echo $short; ?>-<?php echo $val->short; ?>" data-required="legs=<?php echo $short; ?>"<?php echo $sex; ?> data-behind="true" data-preview_row="1">
+                                                            <label for="legs<?php echo $short; ?>-<?php echo $val->short; ?>"><?php echo $opt; ?></label>
+                                                        </li>
+                                                    <?php endforeach; ?>
+                                                </ul>
+                                            <?php endif; ?>
+                                        <?php else:
+                                            $colors = $parts->legs->colors;
+                                            if(!empty($legs->colors)) {
+                                                $colors = $legs->colors;
+                                            }
+                                        ?>
+                                            <span class="condensed"><?php echo $legs->name; ?><?php echo (!empty($legs->sex) ? ' <small>(' . ucfirst($legs->sex) . ' only)</small>' : ''); ?></span>
+                                            <ul>
+                                                <?php foreach($legs->colors as $color): ?>
+                                                    <?php
+                                                        $slug     = preg_replace('/-(\d)/', '$1', str_replace(' ', '-', strtolower($color)));
+                                                        $file     = (!empty($legs->file) ? $legs->file : $slug . '_' . $short . '_%SEX%');
+                                                        $file     = str_replace('%COLOR%', $slug, $file);
+                                                        $file     = str_replace('%SHORT%', $short, $file);
+                                                        $filem    = str_replace('%SEX%', 'male', $file);
+                                                        $filef    = str_replace('%SEX%', 'female', $file);
+
+                                                        $sex      = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($legs->sex)) {
+                                                            $files = str_replace('%SEX%', $legs->sex, $file);
+                                                            $paths = str_replace('%SEX%', $legs->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            $sex  .= ' data-required="sex=' . $legs->sex . '"';
+                                                        }
+                                                    ?>
+                                                    <li>
+                                                        <input type="radio" id="legs-<?php echo $short; ?>_<?php echo $slug; ?>" name="legs"<?php echo $sex; ?>>
+                                                        <label for="legs-<?php echo $short; ?>_<?php echo $slug; ?>"><?php echo $color; ?></label>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php endif; ?>
                                     </li>
-                                    <li>
-                                        <input type="radio" id="legs-pants_red" name="legs" data-file_male="legs/pants/male/red_pants_male.png" data-file_female="legs/pants/female/red_pants_female.png">
-                                        <label for="legs-pants_red">Red</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="legs-pants_teal" name="legs" data-file_male="legs/pants/male/teal_pants_male.png" data-file_female="legs/pants/female/teal_pants_female.png">
-                                        <label for="legs-pants_teal">Teal</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="legs-pants_white" name="legs" data-file_male="legs/pants/male/white_pants_male.png" data-file_female="legs/pants/female/white_pants_female.png">
-                                        <label for="legs-pants_white">White</label>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <input type="radio" id="legs-robe_skirt" name="legs" data-required="sex=male" data-file="legs/skirt/male/robe_skirt_male.png">
-                                <label for="legs-robe_skirt">Robe Skirt <small>(Male only)</small></label>
-                            </li>
-                            <li>
-                                <input type="radio" id="legs-sara" name="legs" data-required="sex=female" data-file="legs/pants/female/SaraLeggings.png">
-                                <label for="legs-sara">Sara's Leggings <small>(Female only)</small></label>
-                            </li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </ul>
                     </li>
                     <li><span class="condensed">Clothes</span>
@@ -200,182 +272,106 @@
                                 <input type="radio" id="clothes-none" name="clothes" checked>
                                 <label for="clothes-none">No Clothes</label>
                             </li>
-                            <li>
-                                <span class="condensed">Long Sleeve Shirt <small>(Male only)</small></span>
-                                <ul>
+                            <?php if(!empty($parts->clothes->torso)): ?>
+                                <?php foreach($parts->clothes->torso as $torso): ?>
+                                    <?php
+                                        $short = (!empty($torso->short) ? $torso->short : str_replace(' ', '', strtolower($torso->name)));
+                                        $path  = (!empty($torso->path) ? $torso->path : 'torso');
+                                        if(empty($torso->fullpath)) {
+                                            $path .= '/%SHORT%/%SEX%';
+                                        }
+                                        $path  = str_replace('%SHORT%', $short, $path);
+                                        $pathm = str_replace('%SEX%', 'male', $path);
+                                        $pathf = str_replace('%SEX%', 'female', $path);
+                                    ?>
                                     <li>
-                                        <input type="radio" id="clothes-longsleeve_brown" name="clothes" data-required="sex=male" data-file="torso/shirts/longsleeve/male/brown_longsleeve.png">
-                                        <label for="clothes-longsleeve_brown">Brown</label>
+                                        <?php if((!empty($torso->colors) && $torso->colors == 'none') || (empty($parts->torso->colors) && empty($torso->colors))): ?>
+                                            <?php if(!empty($torso->opts)): ?>
+                                                <span class="condensed">
+                                            <?php endif; ?>
+                                                <?php
+                                                    $file    = (!empty($torso->file) ? $torso->file : $short);
+                                                    $file    = str_replace('%SHORT%', $short, $file);
+                                                    $filem   = str_replace('%SEX%', 'male', $file);
+                                                    $filef   = str_replace('%SEX%', 'female', $file);
+                                                    $sex     = '';
+                                                    if(empty($torso->opts)) {
+                                                        $sex     = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($torso->sex)) {
+                                                            $files = str_replace('%SEX%', $torso->sex, $file);
+                                                            $paths = str_replace('%SEX%', $torso->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                        }
+                                                    }
+                                                ?>
+                                                    <input type="radio" id="clothes-<?php echo $short; ?>" name="clothes"<?php echo (!empty($torso->sex) ? ' data-required="sex=' . $torso->sex . '"' : '') . $sex; ?>>
+                                                    <label for="clothes-<?php echo $short; ?>"><?php echo $torso->name; ?><?php echo (!empty($torso->sex) ? ' <small>(' . ucfirst($torso->sex) . ' only)</small>' : ''); ?></label>
+                                            <?php if(!empty($torso->opts)): ?>
+                                                </span>
+                                                <ul>
+                                                    <?php foreach($torso->opts as $opt => $val): ?>
+                                                        <?php
+                                                            if(empty($val->short)) {
+                                                                $val->short = str_replace(' ', '', strtolower($opt));
+                                                            }
+                                                            $file    = (!empty($val->file) ? $val->file : $val->short);
+                                                            $file    = str_replace('%SHORT%', $short, $file);
+                                                            $filem   = str_replace('%SEX%', 'male', $file);
+                                                            $filef   = str_replace('%SEX%', 'female', $file);
+
+                                                            $path2   = (!empty($val->path) ? $val->path : $path);
+                                                            $path2m  = str_replace('%SEX%', 'male', $path2);
+                                                            $path2f  = str_replace('%SEX%', 'female', $path2);
+
+                                                            $sex     = ' data-file_male="' . $path2m . '/' . $filem . '.png" data-file_female="' . $path2f . '/' . $filef . '.png"';
+                                                            if(!empty($torso->sex)) {
+                                                                $files = str_replace('%SEX%', $torso->sex, $file);
+                                                                $paths = str_replace('%SEX%', $torso->sex, $path2);
+                                                                $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            }
+                                                        ?>
+                                                        <li>
+                                                            <input type="checkbox" id="clothes<?php echo $short; ?>-<?php echo $val->short; ?>" name="clothes<?php echo $short; ?>-<?php echo $val->short; ?>" data-required="clothes=<?php echo $short; ?>"<?php echo $sex; ?> data-behind="true" data-preview_row="1">
+                                                            <label for="clothes<?php echo $short; ?>-<?php echo $val->short; ?>"><?php echo $opt; ?></label>
+                                                        </li>
+                                                    <?php endforeach; ?>
+                                                </ul>
+                                            <?php endif; ?>
+                                        <?php else:
+                                            $colors = $parts->torso->colors;
+                                            if(!empty($torso->colors)) {
+                                                $colors = $torso->colors;
+                                            }
+                                        ?>
+                                            <span class="condensed"><?php echo $torso->name; ?><?php echo (!empty($torso->sex) ? ' <small>(' . ucfirst($torso->sex) . ' only)</small>' : ''); ?></span>
+                                            <ul>
+                                                <?php foreach($torso->colors as $color): ?>
+                                                    <?php
+                                                        $slug     = preg_replace('/-(\d)/', '$1', str_replace(' ', '-', strtolower($color)));
+                                                        $file     = (!empty($torso->file) ? $torso->file : $slug . '_' . $short . '_%SEX%');
+                                                        $file     = str_replace('%COLOR%', $slug, $file);
+                                                        $file     = str_replace('%SHORT%', $short, $file);
+                                                        $filem    = str_replace('%SEX%', 'male', $file);
+                                                        $filef    = str_replace('%SEX%', 'female', $file);
+
+                                                        $sex      = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($torso->sex)) {
+                                                            $files = str_replace('%SEX%', $torso->sex, $file);
+                                                            $paths = str_replace('%SEX%', $torso->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            $sex  .= ' data-required="sex=' . $torso->sex . '"';
+                                                        }
+                                                    ?>
+                                                    <li>
+                                                        <input type="radio" id="clothes-<?php echo $short; ?>_<?php echo $slug; ?>" name="clothes"<?php echo $sex; ?>>
+                                                        <label for="clothes-<?php echo $short; ?>_<?php echo $slug; ?>"><?php echo $color; ?></label>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php endif; ?>
                                     </li>
-                                    <li>
-                                        <input type="radio" id="clothes-longsleeve_teal" name="clothes" data-required="sex=male" data-file="torso/shirts/longsleeve/male/teal_longsleeve.png">
-                                        <label for="clothes-longsleeve_teal">Teal</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="clothes-longsleeve_maroon" name="clothes" data-required="sex=male" data-file="torso/shirts/longsleeve/male/maroon_longsleeve.png">
-                                        <label for="clothes-longsleeve_maroon">Maroon</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="clothes-longsleeve_white" name="clothes" data-required="sex=male" data-file="torso/shirts/longsleeve/male/white_longsleeve.png">
-                                        <label for="clothes-longsleeve_white">White</label>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <span class="condensed">Sleeveless Shirt <small>(Female only)</small></span>
-                                <ul>
-                                    <li>
-                                        <input type="radio" id="clothes-sleeveless_brown" name="clothes" data-required="sex=female" data-file="torso/shirts/sleeveless/female/brown_sleeveless.png">
-                                        <label for="clothes-sleeveless_brown">Brown</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="clothes-sleeveless_teal" name="clothes" data-required="sex=female" data-file="torso/shirts/sleeveless/female/teal_sleeveless.png">
-                                        <label for="clothes-sleeveless_teal">Teal</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="clothes-sleeveless_maroon" name="clothes" data-required="sex=female" data-file="torso/shirts/sleeveless/female/maroon_sleeveless.png">
-                                        <label for="clothes-sleeveless_maroon">Maroon</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="clothes-sleeveless_white" name="clothes" data-required="sex=female" data-file="torso/shirts/sleeveless/female/white_sleeveless.png">
-                                        <label for="clothes-sleeveless_white">White</label>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <span class="condensed">Pirate Shirt <small>(Female only)</small></span>
-                                <ul>
-                                    <li>
-                                        <input type="radio" id="clothes-pirate_brown" name="clothes" data-required="sex=female" data-file="torso/shirts/sleeveless/female/brown_pirate.png">
-                                        <label for="clothes-pirate_brown">Brown</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="clothes-pirate_teal" name="clothes" data-required="sex=female" data-file="torso/shirts/sleeveless/female/teal_pirate.png">
-                                        <label for="clothes-pirate_teal">Teal</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="clothes-pirate_maroon" name="clothes" data-required="sex=female" data-file="torso/shirts/sleeveless/female/maroon_pirate.png">
-                                        <label for="clothes-pirate_maroon">Maroon</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="clothes-pirate_white" name="clothes" data-required="sex=female" data-file="torso/shirts/sleeveless/female/white_pirate.png">
-                                        <label for="clothes-pirate_white">White</label>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <span class="condensed">Sleeveless Tunic <small>(Female only)</small></span>
-                                <ul>
-                                    <li>
-                                        <input type="radio" id="clothes-tunic_brown" name="clothes" data-required="sex=female" data-file="torso/tunics/female/brown_tunic.png">
-                                        <label for="clothes-tunic_brown">Brown</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="clothes-tunic_teal" name="clothes" data-required="sex=female" data-file="torso/tunics/female/teal_tunic.png">
-                                        <label for="clothes-tunic_teal">Teal</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="clothes-tunic_maroon" name="clothes" data-required="sex=female" data-file="torso/tunics/female/maroon_tunic.png">
-                                        <label for="clothes-tunic_maroon">Maroon</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="clothes-tunic_white" name="clothes" data-required="sex=female" data-file="torso/tunics/female/white_tunic.png">
-                                        <label for="clothes-tunic_white">White</label>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <input type="radio" id="clothes-sara" name="clothes" data-required="sex=female" data-file="torso/shirts/sleeveless/female/SaraShirt.png">
-                                <label for="clothes-sara">Sara's Shirt <small>(Female only)</small></label>
-                            </li>
-                            <li>
-                                <span class="condensed">
-                                    <input type="radio" id="clothes-formal" name="clothes" data-required="sex=male">
-                                    <label for="clothes-formal">Formal Wear <small>(Male only)</small> <small>(No Thrust/Shoot)</small></label>
-                                </span>
-                                <ul>
-                                    <li>
-                                        <input type="checkbox" id="formal-shirt" name="formal-shirt" data-required="clothes=formal" data-file="formal_male_no_th-sh/shirt.png">
-                                        <label for="formal-shirt">Shirt</label>
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" id="formal-pants" name="formal-pants" data-required="clothes=formal" data-file="formal_male_no_th-sh/pants.png">
-                                        <label for="formal-pants">Pants</label>
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" id="formal-vest" name="formal-vest" data-required="clothes=formal" data-file="formal_male_no_th-sh/vest.png">
-                                        <label for="formal-vest">Vest</label>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <input type="radio" id="clothes-dress_sash" name="clothes" data-required="sex=female" data-file="torso/dress_female/dress_w_sash_female.png">
-                                <label for="clothes-dress_sash">Dress with Sash <small>(Female only)</small></label>
-                            </li>
-                            <li>
-                                <span class="condensed">
-                                    <input type="radio" id="clothes-gown" name="clothes" data-required="sex=female">
-                                    <label for="clothes-gown">Gown <small>(Female only)</small></label>
-                                </span>
-                                <ul>
-                                    <li>
-                                        <input type="checkbox" id="gown-underdress" name="gown-underdress" data-required="clothes=gown" data-file="torso/dress_female/underdress.png">
-                                        <label for="gown-underdress">Underdress</label>
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" id="gown-overskirt" name="gown-overskirt" data-required="clothes=gown" data-file="torso/dress_female/overskirt.png">
-                                        <label for="gown-overskirt">Overskirt</label>
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" id="gown-blue-vest" name="gown-blue-vest" data-required="clothes=gown" data-file="torso/dress_female/blue_vest.png">
-                                        <label for="gown-blue-vest">Blue Vest</label>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li><span class="condensed">Robe <small>(Female only)</small> <small>(No Thrust/Shoot)</small></span>
-                                <ul>
-                                    <li>
-                                        <input type="radio" id="clothes-robe_black" name="clothes" data-required="sex=female" data-file="torso/robes_female_no_th-sh/black.png">
-                                        <label for="clothes-robe_black">Black</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="clothes-robe_blue" name="clothes" data-required="sex=female" data-file="torso/robes_female_no_th-sh/blue.png">
-                                        <label for="clothes-robe_blue">Blue</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="clothes-robe_brown" name="clothes" data-required="sex=female" data-file="torso/robes_female_no_th-sh/brown.png">
-                                        <label for="clothes-robe_brown">Brown</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="clothes-robe_dark_brown" name="clothes" data-required="sex=female" data-file="torso/robes_female_no_th-sh/dark brown.png">
-                                        <label for="clothes-robe_dark_brown">Dark Brown</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="clothes-robe_dark_gray" name="clothes" data-required="sex=female" data-file="torso/robes_female_no_th-sh/dark gray.png">
-                                        <label for="clothes-robe_dark_gray">Dark Gray</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="clothes-robe_light_gray" name="clothes" data-required="sex=female" data-file="torso/robes_female_no_th-sh/light gray.png">
-                                        <label for="clothes-robe_light_gray">Light Gray</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="clothes-robe_forest_green" name="clothes" data-required="sex=female" data-file="torso/robes_female_no_th-sh/forest green.png">
-                                        <label for="clothes-robe_forest_green">Forest Green</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="clothes-robe_purple" name="clothes" data-required="sex=female" data-file="torso/robes_female_no_th-sh/purple.png">
-                                        <label for="clothes-robe_purple">Purple</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="clothes-robe_red" name="clothes" data-required="sex=female" data-file="torso/robes_female_no_th-sh/red.png">
-                                        <label for="clothes-robe_red">Red</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="clothes-robe_white" name="clothes" data-required="sex=female" data-file="torso/robes_female_no_th-sh/white.png">
-                                        <label for="clothes-robe_white">White</label>
-                                    </li>
-                                </ul>
-                            </li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </ul>
                     </li>
                     <li><span class="condensed">Mail</span>
@@ -384,10 +380,106 @@
                                 <input type="radio" id="mail-none" name="mail" checked>
                                 <label for="mail-none">No Mail</label>
                             </li>
-                            <li>
-                                <input type="radio" id="mail-chain" name="mail" data-file_male="torso/chain/mail_male.png" data-file_female="torso/chain/mail_female.png">
-                                <label for="mail-chain">Chain Mail</label>
-                            </li>
+                            <?php if(!empty($parts->armor->mail)): ?>
+                                <?php foreach($parts->armor->mail as $mail): ?>
+                                    <?php
+                                        $short = (!empty($mail->short) ? $mail->short : str_replace(' ', '', strtolower($mail->name)));
+                                        $path  = (!empty($mail->path) ? $mail->path : 'torso/chain');
+                                        if(empty($mail->fullpath)) {
+                                            $path .= '/%SHORT%/%SEX%';
+                                        }
+                                        $path  = str_replace('%SHORT%', $short, $path);
+                                        $pathm = str_replace('%SEX%', 'male', $path);
+                                        $pathf = str_replace('%SEX%', 'female', $path);
+                                    ?>
+                                    <li>
+                                        <?php if((!empty($mail->colors) && $mail->colors == 'none') || (empty($parts->armor->colors) && empty($mail->colors))): ?>
+                                            <?php if(!empty($mail->opts)): ?>
+                                                <span class="condensed">
+                                            <?php endif; ?>
+                                                <?php
+                                                    $file    = (!empty($mail->file) ? $mail->file : $short);
+                                                    $file    = str_replace('%SHORT%', $short, $file);
+                                                    $filem   = str_replace('%SEX%', 'male', $file);
+                                                    $filef   = str_replace('%SEX%', 'female', $file);
+                                                    $sex     = '';
+                                                    if(empty($mail->opts)) {
+                                                        $sex     = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($mail->sex)) {
+                                                            $files = str_replace('%SEX%', $mail->sex, $file);
+                                                            $paths = str_replace('%SEX%', $mail->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                        }
+                                                    }
+                                                ?>
+                                                    <input type="radio" id="mail-<?php echo $short; ?>" name="mail"<?php echo (!empty($mail->sex) ? ' data-required="sex=' . $mail->sex . '"' : '') . $sex; ?>>
+                                                    <label for="mail-<?php echo $short; ?>"><?php echo $mail->name; ?><?php echo (!empty($mail->sex) ? ' <small>(' . ucfirst($mail->sex) . ' only)</small>' : ''); ?></label>
+                                            <?php if(!empty($mail->opts)): ?>
+                                                </span>
+                                                <ul>
+                                                    <?php foreach($mail->opts as $opt => $val): ?>
+                                                        <?php
+                                                            if(empty($val->short)) {
+                                                                $val->short = str_replace(' ', '', strtolower($opt));
+                                                            }
+                                                            $file    = (!empty($val->file) ? $val->file : $val->short);
+                                                            $file    = str_replace('%SHORT%', $short, $file);
+                                                            $filem   = str_replace('%SEX%', 'male', $file);
+                                                            $filef   = str_replace('%SEX%', 'female', $file);
+
+                                                            $path2   = (!empty($val->path) ? $val->path : $path);
+                                                            $path2m  = str_replace('%SEX%', 'male', $path2);
+                                                            $path2f  = str_replace('%SEX%', 'female', $path2);
+
+                                                            $sex     = ' data-file_male="' . $path2m . '/' . $filem . '.png" data-file_female="' . $path2f . '/' . $filef . '.png"';
+                                                            if(!empty($mail->sex)) {
+                                                                $files = str_replace('%SEX%', $mail->sex, $file);
+                                                                $paths = str_replace('%SEX%', $mail->sex, $path2);
+                                                                $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            }
+                                                        ?>
+                                                        <li>
+                                                            <input type="checkbox" id="mail<?php echo $short; ?>-<?php echo $val->short; ?>" name="mail<?php echo $short; ?>-<?php echo $val->short; ?>" data-required="mail=<?php echo $short; ?>"<?php echo $sex; ?> data-behind="true" data-preview_row="1">
+                                                            <label for="mail<?php echo $short; ?>-<?php echo $val->short; ?>"><?php echo $opt; ?></label>
+                                                        </li>
+                                                    <?php endforeach; ?>
+                                                </ul>
+                                            <?php endif; ?>
+                                        <?php else:
+                                            $colors = $parts->armor->colors;
+                                            if(!empty($mail->colors)) {
+                                                $colors = $mail->colors;
+                                            }
+                                        ?>
+                                            <span class="condensed"><?php echo $mail->name; ?><?php echo (!empty($mail->sex) ? ' <small>(' . ucfirst($mail->sex) . ' only)</small>' : ''); ?></span>
+                                            <ul>
+                                                <?php foreach($mail->colors as $color): ?>
+                                                    <?php
+                                                        $slug     = preg_replace('/-(\d)/', '$1', str_replace(' ', '-', strtolower($color)));
+                                                        $file     = (!empty($mail->file) ? $mail->file : $slug . '_' . $short . '_%SEX%');
+                                                        $file     = str_replace('%COLOR%', $slug, $file);
+                                                        $file     = str_replace('%SHORT%', $short, $file);
+                                                        $filem    = str_replace('%SEX%', 'male', $file);
+                                                        $filef    = str_replace('%SEX%', 'female', $file);
+
+                                                        $sex      = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($mail->sex)) {
+                                                            $files = str_replace('%SEX%', $mail->sex, $file);
+                                                            $paths = str_replace('%SEX%', $mail->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            $sex  .= ' data-required="sex=' . $mail->sex . '"';
+                                                        }
+                                                    ?>
+                                                    <li>
+                                                        <input type="radio" id="mail-<?php echo $short; ?>_<?php echo $slug; ?>" name="mail"<?php echo $sex; ?>>
+                                                        <label for="mail-<?php echo $short; ?>_<?php echo $slug; ?>"><?php echo $color; ?></label>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php endif; ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </ul>
                     </li>
                     <li><span class="condensed">Armor</span>
@@ -396,18 +488,106 @@
                                 <input type="radio" id="armor-none" name="armor" checked>
                                 <label for="armor-none">No Armor</label>
                             </li>
-                            <li>
-                                <input type="radio" id="armor-chest_gold" name="armor" data-file_male="torso/gold/chest_male.png" data-file_female="torso/gold/chest_female.png">
-                                <label for="armor-chest_gold">Gold Chest</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="armor-chest_leather" name="armor" data-file_male="torso/leather/chest_male.png" data-file_female="torso/leather/chest_female.png">
-                                <label for="armor-chest_leather">Leather Chest</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="armor-chest_plate" name="armor" data-file_male="torso/plate/chest_male.png" data-file_female="torso/plate/chest_female.png">
-                                <label for="armor-chest_plate">Plate Chest</label>
-                            </li>
+                            <?php if(!empty($parts->armor->chest)): ?>
+                                <?php foreach($parts->armor->chest as $chest): ?>
+                                    <?php
+                                        $short = (!empty($chest->short) ? $chest->short : str_replace(' ', '', strtolower($chest->name)));
+                                        $path  = (!empty($chest->path) ? $chest->path : 'torso/chain');
+                                        if(empty($chest->fullpath)) {
+                                            $path .= '/%SHORT%/%SEX%';
+                                        }
+                                        $path  = str_replace('%SHORT%', $short, $path);
+                                        $pathm = str_replace('%SEX%', 'male', $path);
+                                        $pathf = str_replace('%SEX%', 'female', $path);
+                                    ?>
+                                    <li>
+                                        <?php if((!empty($chest->colors) && $chest->colors == 'none') || (empty($parts->armor->colors) && empty($chest->colors))): ?>
+                                            <?php if(!empty($chest->opts)): ?>
+                                                <span class="condensed">
+                                            <?php endif; ?>
+                                                <?php
+                                                    $file    = (!empty($chest->file) ? $chest->file : $short);
+                                                    $file    = str_replace('%SHORT%', $short, $file);
+                                                    $filem   = str_replace('%SEX%', 'male', $file);
+                                                    $filef   = str_replace('%SEX%', 'female', $file);
+                                                    $sex     = '';
+                                                    if(empty($chest->opts)) {
+                                                        $sex     = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($chest->sex)) {
+                                                            $files = str_replace('%SEX%', $chest->sex, $file);
+                                                            $paths = str_replace('%SEX%', $chest->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                        }
+                                                    }
+                                                ?>
+                                                    <input type="radio" id="armor-<?php echo $short; ?>" name="armor"<?php echo (!empty($chest->sex) ? ' data-required="sex=' . $chest->sex . '"' : '') . $sex; ?>>
+                                                    <label for="armor-<?php echo $short; ?>"><?php echo $chest->name; ?><?php echo (!empty($chest->sex) ? ' <small>(' . ucfirst($chest->sex) . ' only)</small>' : ''); ?></label>
+                                            <?php if(!empty($chest->opts)): ?>
+                                                </span>
+                                                <ul>
+                                                    <?php foreach($chest->opts as $opt => $val): ?>
+                                                        <?php
+                                                            if(empty($val->short)) {
+                                                                $val->short = str_replace(' ', '', strtolower($opt));
+                                                            }
+                                                            $file    = (!empty($val->file) ? $val->file : $val->short);
+                                                            $file    = str_replace('%SHORT%', $short, $file);
+                                                            $filem   = str_replace('%SEX%', 'male', $file);
+                                                            $filef   = str_replace('%SEX%', 'female', $file);
+
+                                                            $path2   = (!empty($val->path) ? $val->path : $path);
+                                                            $path2m  = str_replace('%SEX%', 'male', $path2);
+                                                            $path2f  = str_replace('%SEX%', 'female', $path2);
+
+                                                            $sex     = ' data-file_male="' . $path2m . '/' . $filem . '.png" data-file_female="' . $path2f . '/' . $filef . '.png"';
+                                                            if(!empty($chest->sex)) {
+                                                                $files = str_replace('%SEX%', $chest->sex, $file);
+                                                                $paths = str_replace('%SEX%', $chest->sex, $path2);
+                                                                $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            }
+                                                        ?>
+                                                        <li>
+                                                            <input type="checkbox" id="armor<?php echo $short; ?>-<?php echo $val->short; ?>" name="armor<?php echo $short; ?>-<?php echo $val->short; ?>" data-required="armor=<?php echo $short; ?>"<?php echo $sex; ?> data-behind="true" data-preview_row="1">
+                                                            <label for="armor<?php echo $short; ?>-<?php echo $val->short; ?>"><?php echo $opt; ?></label>
+                                                        </li>
+                                                    <?php endforeach; ?>
+                                                </ul>
+                                            <?php endif; ?>
+                                        <?php else:
+                                            $colors = $parts->armor->colors;
+                                            if(!empty($chest->colors)) {
+                                                $colors = $chest->colors;
+                                            }
+                                        ?>
+                                            <span class="condensed"><?php echo $chest->name; ?><?php echo (!empty($chest->sex) ? ' <small>(' . ucfirst($chest->sex) . ' only)</small>' : ''); ?></span>
+                                            <ul>
+                                                <?php foreach($chest->colors as $color): ?>
+                                                    <?php
+                                                        $slug     = preg_replace('/-(\d)/', '$1', str_replace(' ', '-', strtolower($color)));
+                                                        $file     = (!empty($chest->file) ? $chest->file : $slug . '_' . $short . '_%SEX%');
+                                                        $file     = str_replace('%COLOR%', $slug, $file);
+                                                        $file     = str_replace('%SHORT%', $short, $file);
+                                                        $filem    = str_replace('%SEX%', 'male', $file);
+                                                        $filef    = str_replace('%SEX%', 'female', $file);
+
+                                                        $sex      = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($chest->sex)) {
+                                                            $files = str_replace('%SEX%', $chest->sex, $file);
+                                                            $paths = str_replace('%SEX%', $chest->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            $sex  .= ' data-required="sex=' . $chest->sex . '"';
+                                                        }
+                                                    ?>
+                                                    <li>
+                                                        <input type="radio" id="armor-<?php echo $short; ?>_<?php echo $slug; ?>" name="armor"<?php echo $sex; ?>>
+                                                        <label for="armor-<?php echo $short; ?>_<?php echo $slug; ?>"><?php echo $color; ?></label>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php endif; ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </ul>
                     </li>
                     <li><span class="condensed">Jacket</span>
@@ -416,28 +596,215 @@
                                 <input type="radio" id="jacket-none" name="jacket" checked>
                                 <label for="jacket-none">No Jacket</label>
                             </li>
-                            <li>
-                                <input type="radio" id="jacket-tabard" name="jacket" data-file_male="torso/chain/tabard/jacket_male.png" data-file_female="torso/chain/tabard/jacket_female.png">
-                                <label for="jacket-tabard">Tabard</label>
-                            </li>
+                            <?php if(!empty($parts->armor->jacket)): ?>
+                                <?php foreach($parts->armor->jacket as $jacket): ?>
+                                    <?php
+                                        $short = (!empty($jacket->short) ? $jacket->short : str_replace(' ', '', strtolower($jacket->name)));
+                                        $path  = (!empty($jacket->path) ? $jacket->path : 'torso/chain');
+                                        if(empty($jacket->fullpath)) {
+                                            $path .= '/%SHORT%/%SEX%';
+                                        }
+                                        $path  = str_replace('%SHORT%', $short, $path);
+                                        $pathm = str_replace('%SEX%', 'male', $path);
+                                        $pathf = str_replace('%SEX%', 'female', $path);
+                                    ?>
+                                    <li>
+                                        <?php if((!empty($jacket->colors) && $jacket->colors == 'none') || (empty($parts->armor->colors) && empty($jacket->colors))): ?>
+                                            <?php if(!empty($jacket->opts)): ?>
+                                                <span class="condensed">
+                                            <?php endif; ?>
+                                                <?php
+                                                    $file    = (!empty($jacket->file) ? $jacket->file : $short);
+                                                    $file    = str_replace('%SHORT%', $short, $file);
+                                                    $filem   = str_replace('%SEX%', 'male', $file);
+                                                    $filef   = str_replace('%SEX%', 'female', $file);
+                                                    $sex     = '';
+                                                    if(empty($jacket->opts)) {
+                                                        $sex     = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($jacket->sex)) {
+                                                            $files = str_replace('%SEX%', $jacket->sex, $file);
+                                                            $paths = str_replace('%SEX%', $jacket->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                        }
+                                                    }
+                                                ?>
+                                                    <input type="radio" id="armor-<?php echo $short; ?>" name="armor"<?php echo (!empty($jacket->sex) ? ' data-required="sex=' . $jacket->sex . '"' : '') . $sex; ?>>
+                                                    <label for="armor-<?php echo $short; ?>"><?php echo $jacket->name; ?><?php echo (!empty($jacket->sex) ? ' <small>(' . ucfirst($jacket->sex) . ' only)</small>' : ''); ?></label>
+                                            <?php if(!empty($jacket->opts)): ?>
+                                                </span>
+                                                <ul>
+                                                    <?php foreach($jacket->opts as $opt => $val): ?>
+                                                        <?php
+                                                            if(empty($val->short)) {
+                                                                $val->short = str_replace(' ', '', strtolower($opt));
+                                                            }
+                                                            $file    = (!empty($val->file) ? $val->file : $val->short);
+                                                            $file    = str_replace('%SHORT%', $short, $file);
+                                                            $filem   = str_replace('%SEX%', 'male', $file);
+                                                            $filef   = str_replace('%SEX%', 'female', $file);
+
+                                                            $path2   = (!empty($val->path) ? $val->path : $path);
+                                                            $path2m  = str_replace('%SEX%', 'male', $path2);
+                                                            $path2f  = str_replace('%SEX%', 'female', $path2);
+
+                                                            $sex     = ' data-file_male="' . $path2m . '/' . $filem . '.png" data-file_female="' . $path2f . '/' . $filef . '.png"';
+                                                            if(!empty($jacket->sex)) {
+                                                                $files = str_replace('%SEX%', $jacket->sex, $file);
+                                                                $paths = str_replace('%SEX%', $jacket->sex, $path2);
+                                                                $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            }
+                                                        ?>
+                                                        <li>
+                                                            <input type="checkbox" id="armor<?php echo $short; ?>-<?php echo $val->short; ?>" name="armor<?php echo $short; ?>-<?php echo $val->short; ?>" data-required="armor=<?php echo $short; ?>"<?php echo $sex; ?> data-behind="true" data-preview_row="1">
+                                                            <label for="armor<?php echo $short; ?>-<?php echo $val->short; ?>"><?php echo $opt; ?></label>
+                                                        </li>
+                                                    <?php endforeach; ?>
+                                                </ul>
+                                            <?php endif; ?>
+                                        <?php else:
+                                            $colors = $parts->armor->colors;
+                                            if(!empty($jacket->colors)) {
+                                                $colors = $jacket->colors;
+                                            }
+                                        ?>
+                                            <span class="condensed"><?php echo $jacket->name; ?><?php echo (!empty($jacket->sex) ? ' <small>(' . ucfirst($jacket->sex) . ' only)</small>' : ''); ?></span>
+                                            <ul>
+                                                <?php foreach($jacket->colors as $color): ?>
+                                                    <?php
+                                                        $slug     = preg_replace('/-(\d)/', '$1', str_replace(' ', '-', strtolower($color)));
+                                                        $file     = (!empty($jacket->file) ? $jacket->file : $slug . '_' . $short . '_%SEX%');
+                                                        $file     = str_replace('%COLOR%', $slug, $file);
+                                                        $file     = str_replace('%SHORT%', $short, $file);
+                                                        $filem    = str_replace('%SEX%', 'male', $file);
+                                                        $filef    = str_replace('%SEX%', 'female', $file);
+
+                                                        $sex      = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($jacket->sex)) {
+                                                            $files = str_replace('%SEX%', $jacket->sex, $file);
+                                                            $paths = str_replace('%SEX%', $jacket->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            $sex  .= ' data-required="sex=' . $jacket->sex . '"';
+                                                        }
+                                                    ?>
+                                                    <li>
+                                                        <input type="radio" id="armor-<?php echo $short; ?>_<?php echo $slug; ?>" name="armor"<?php echo $sex; ?>>
+                                                        <label for="armor-<?php echo $short; ?>_<?php echo $slug; ?>"><?php echo $color; ?></label>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php endif; ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </ul>
                     </li>
-                    <li><span class="condensed">Tie</span>
+                    <li><span class="condensed">Neck</span>
                         <ul>
                             <li>
-                                <input type="radio" id="tie-none" name="tie" checked>
-                                <label for="tie-none">No Tie</label>
+                                <input type="radio" id="neck-none" name="tie" checked>
+                                <label for="neck-none">No Neck Accessory</label>
                             </li>
-                            <li>
-                                <input type="radio" id="tie-on" name="tie" data-required="sex=male" data-file="formal_male_no_th-sh/tie.png">
-                                <label for="tie-on">Tie <small>(Male only)</small> <small>(No Thrust/Shoot)</small></label>
-                            </li>
-                            <li>
-                                <input type="radio" id="tie-bow" name="tie" data-required="sex=male" data-file="formal_male_no_th-sh/bowtie.png">
-                                <label for="tie-bow">Bow Tie <small>(Male only)</small> <small>(No Thrust/Shoot)</small></label>
-                            </li>
+                            <?php if(!empty($parts->clothes->neck)): ?>
+                                <?php foreach($parts->clothes->neck as $neck): ?>
+                                    <?php
+                                        $short = (!empty($neck->short) ? $neck->short : str_replace(' ', '', strtolower($neck->name)));
+                                        $path  = (!empty($neck->path) ? $neck->path : 'accessories/neck');
+                                        if(empty($neck->fullpath)) {
+                                            $path .= '/%SHORT%/%SEX%';
+                                        }
+                                        $path  = str_replace('%SHORT%', $short, $path);
+                                        $pathm = str_replace('%SEX%', 'male', $path);
+                                        $pathf = str_replace('%SEX%', 'female', $path);
+                                    ?>
+                                    <li>
+                                        <?php if((!empty($neck->colors) && $neck->colors == 'none') || (empty($parts->clothes->colors) && empty($neck->colors))): ?>
+                                            <?php if(!empty($neck->opts)): ?>
+                                                <span class="condensed">
+                                            <?php endif; ?>
+                                                <?php
+                                                    $file    = (!empty($neck->file) ? $neck->file : $short);
+                                                    $file    = str_replace('%SHORT%', $short, $file);
+                                                    $filem   = str_replace('%SEX%', 'male', $file);
+                                                    $filef   = str_replace('%SEX%', 'female', $file);
+                                                    $sex     = '';
+                                                    if(empty($neck->opts)) {
+                                                        $sex     = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($neck->sex)) {
+                                                            $files = str_replace('%SEX%', $neck->sex, $file);
+                                                            $paths = str_replace('%SEX%', $neck->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                        }
+                                                    }
+                                                ?>
+                                                    <input type="radio" id="neck-<?php echo $short; ?>" name="neck"<?php echo (!empty($neck->sex) ? ' data-required="sex=' . $neck->sex . '"' : '') . $sex; ?>>
+                                                    <label for="neck-<?php echo $short; ?>"><?php echo $neck->name; ?><?php echo (!empty($neck->sex) ? ' <small>(' . ucfirst($neck->sex) . ' only)</small>' : ''); ?></label>
+                                            <?php if(!empty($neck->opts)): ?>
+                                                </span>
+                                                <ul>
+                                                    <?php foreach($neck->opts as $opt => $val): ?>
+                                                        <?php
+                                                            if(empty($val->short)) {
+                                                                $val->short = str_replace(' ', '', strtolower($opt));
+                                                            }
+                                                            $file    = (!empty($val->file) ? $val->file : $val->short);
+                                                            $file    = str_replace('%SHORT%', $short, $file);
+                                                            $filem   = str_replace('%SEX%', 'male', $file);
+                                                            $filef   = str_replace('%SEX%', 'female', $file);
+
+                                                            $path2   = (!empty($val->path) ? $val->path : $path);
+                                                            $path2m  = str_replace('%SEX%', 'male', $path2);
+                                                            $path2f  = str_replace('%SEX%', 'female', $path2);
+
+                                                            $sex     = ' data-file_male="' . $path2m . '/' . $filem . '.png" data-file_female="' . $path2f . '/' . $filef . '.png"';
+                                                            if(!empty($neck->sex)) {
+                                                                $files = str_replace('%SEX%', $neck->sex, $file);
+                                                                $paths = str_replace('%SEX%', $neck->sex, $path2);
+                                                                $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            }
+                                                        ?>
+                                                        <li>
+                                                            <input type="checkbox" id="neck<?php echo $short; ?>-<?php echo $val->short; ?>" name="neck<?php echo $short; ?>-<?php echo $val->short; ?>" data-required="neck=<?php echo $short; ?>"<?php echo $sex; ?> data-behind="true" data-preview_row="1">
+                                                            <label for="neck<?php echo $short; ?>-<?php echo $val->short; ?>"><?php echo $opt; ?></label>
+                                                        </li>
+                                                    <?php endforeach; ?>
+                                                </ul>
+                                            <?php endif; ?>
+                                        <?php else:
+                                            $colors = $parts->clothes->colors;
+                                            if(!empty($neck->colors)) {
+                                                $colors = $neck->colors;
+                                            }
+                                        ?>
+                                            <span class="condensed"><?php echo $neck->name; ?><?php echo (!empty($neck->sex) ? ' <small>(' . ucfirst($neck->sex) . ' only)</small>' : ''); ?></span>
+                                            <ul>
+                                                <?php foreach($neck->colors as $color): ?>
+                                                    <?php
+                                                        $slug     = preg_replace('/-(\d)/', '$1', str_replace(' ', '-', strtolower($color)));
+                                                        $file     = (!empty($neck->file) ? $neck->file : $slug . '_' . $short . '_%SEX%');
+                                                        $file     = str_replace('%COLOR%', $slug, $file);
+                                                        $file     = str_replace('%SHORT%', $short, $file);
+                                                        $filem    = str_replace('%SEX%', 'male', $file);
+                                                        $filef    = str_replace('%SEX%', 'female', $file);
+
+                                                        $sex      = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($neck->sex)) {
+                                                            $files = str_replace('%SEX%', $neck->sex, $file);
+                                                            $paths = str_replace('%SEX%', $neck->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            $sex  .= ' data-required="sex=' . $neck->sex . '"';
+                                                        }
+                                                    ?>
+                                                    <li>
+                                                        <input type="radio" id="neck-<?php echo $short; ?>_<?php echo $slug; ?>" name="neck"<?php echo $sex; ?>>
+                                                        <label for="neck-<?php echo $short; ?>_<?php echo $slug; ?>"><?php echo $color; ?></label>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php endif; ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </ul>
-                    </li>
                     </li>
                     <li><span class="condensed">Arms</span>
                         <ul>
@@ -445,14 +812,106 @@
                                 <input type="radio" id="arms-none" name="arms" checked>
                                 <label for="arms-none">No Arms</label>
                             </li>
-                            <li>
-                                <input type="radio" id="arms-gold" name="arms" data-file_male="torso/gold/arms_male.png" data-file_female="torso/gold/arms_female.png">
-                                <label for="arms-gold">Gold Arms</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="arms-plate" name="arms" data-file_male="torso/plate/arms_male.png" data-file_female="torso/plate/arms_female.png">
-                                <label for="arms-plate">Plate Arms</label>
-                            </li>
+                            <?php if(!empty($parts->armor->arms)): ?>
+                                <?php foreach($parts->armor->arms as $arms): ?>
+                                    <?php
+                                        $short = (!empty($arms->short) ? $arms->short : str_replace(' ', '', strtolower($arms->name)));
+                                        $path  = (!empty($arms->path) ? $arms->path : 'torso');
+                                        if(empty($arms->fullpath)) {
+                                            $path .= '/%SHORT%/%SEX%';
+                                        }
+                                        $path  = str_replace('%SHORT%', $short, $path);
+                                        $pathm = str_replace('%SEX%', 'male', $path);
+                                        $pathf = str_replace('%SEX%', 'female', $path);
+                                    ?>
+                                    <li>
+                                        <?php if((!empty($arms->colors) && $arms->colors == 'none') || (empty($parts->armor->colors) && empty($arms->colors))): ?>
+                                            <?php if(!empty($arms->opts)): ?>
+                                                <span class="condensed">
+                                            <?php endif; ?>
+                                                <?php
+                                                    $file    = (!empty($arms->file) ? $arms->file : $short);
+                                                    $file    = str_replace('%SHORT%', $short, $file);
+                                                    $filem   = str_replace('%SEX%', 'male', $file);
+                                                    $filef   = str_replace('%SEX%', 'female', $file);
+                                                    $sex     = '';
+                                                    if(empty($arms->opts)) {
+                                                        $sex     = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($arms->sex)) {
+                                                            $files = str_replace('%SEX%', $arms->sex, $file);
+                                                            $paths = str_replace('%SEX%', $arms->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                        }
+                                                    }
+                                                ?>
+                                                    <input type="radio" id="arms-<?php echo $short; ?>" name="arms"<?php echo (!empty($arms->sex) ? ' data-required="sex=' . $arms->sex . '"' : '') . $sex; ?>>
+                                                    <label for="arms-<?php echo $short; ?>"><?php echo $arms->name; ?><?php echo (!empty($arms->sex) ? ' <small>(' . ucfirst($arms->sex) . ' only)</small>' : ''); ?></label>
+                                            <?php if(!empty($arms->opts)): ?>
+                                                </span>
+                                                <ul>
+                                                    <?php foreach($arms->opts as $opt => $val): ?>
+                                                        <?php
+                                                            if(empty($val->short)) {
+                                                                $val->short = str_replace(' ', '', strtolower($opt));
+                                                            }
+                                                            $file    = (!empty($val->file) ? $val->file : $val->short);
+                                                            $file    = str_replace('%SHORT%', $short, $file);
+                                                            $filem   = str_replace('%SEX%', 'male', $file);
+                                                            $filef   = str_replace('%SEX%', 'female', $file);
+
+                                                            $path2   = (!empty($val->path) ? $val->path : $path);
+                                                            $path2m  = str_replace('%SEX%', 'male', $path2);
+                                                            $path2f  = str_replace('%SEX%', 'female', $path2);
+
+                                                            $sex     = ' data-file_male="' . $path2m . '/' . $filem . '.png" data-file_female="' . $path2f . '/' . $filef . '.png"';
+                                                            if(!empty($arms->sex)) {
+                                                                $files = str_replace('%SEX%', $arms->sex, $file);
+                                                                $paths = str_replace('%SEX%', $arms->sex, $path2);
+                                                                $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            }
+                                                        ?>
+                                                        <li>
+                                                            <input type="checkbox" id="arms<?php echo $short; ?>-<?php echo $val->short; ?>" name="arms<?php echo $short; ?>-<?php echo $val->short; ?>" data-required="arms=<?php echo $short; ?>"<?php echo $sex; ?> data-behind="true" data-preview_row="1">
+                                                            <label for="arms<?php echo $short; ?>-<?php echo $val->short; ?>"><?php echo $opt; ?></label>
+                                                        </li>
+                                                    <?php endforeach; ?>
+                                                </ul>
+                                            <?php endif; ?>
+                                        <?php else:
+                                            $colors = $parts->armor->colors;
+                                            if(!empty($arms->colors)) {
+                                                $colors = $arms->colors;
+                                            }
+                                        ?>
+                                            <span class="condensed"><?php echo $arms->name; ?><?php echo (!empty($arms->sex) ? ' <small>(' . ucfirst($arms->sex) . ' only)</small>' : ''); ?></span>
+                                            <ul>
+                                                <?php foreach($arms->colors as $color): ?>
+                                                    <?php
+                                                        $slug     = preg_replace('/-(\d)/', '$1', str_replace(' ', '-', strtolower($color)));
+                                                        $file     = (!empty($arms->file) ? $arms->file : $slug . '_' . $short . '_%SEX%');
+                                                        $file     = str_replace('%COLOR%', $slug, $file);
+                                                        $file     = str_replace('%SHORT%', $short, $file);
+                                                        $filem    = str_replace('%SEX%', 'male', $file);
+                                                        $filef    = str_replace('%SEX%', 'female', $file);
+
+                                                        $sex      = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($arms->sex)) {
+                                                            $files = str_replace('%SEX%', $arms->sex, $file);
+                                                            $paths = str_replace('%SEX%', $arms->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            $sex  .= ' data-required="sex=' . $arms->sex . '"';
+                                                        }
+                                                    ?>
+                                                    <li>
+                                                        <input type="radio" id="arms-<?php echo $short; ?>_<?php echo $slug; ?>" name="arms"<?php echo $sex; ?>>
+                                                        <label for="arms-<?php echo $short; ?>_<?php echo $slug; ?>"><?php echo $color; ?></label>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php endif; ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </ul>
                     </li>
                     <li><span class="condensed">Shoulders</span>
@@ -461,10 +920,106 @@
                                 <input type="radio" id="shoulders-none" name="shoulders" checked>
                                 <label for="shoulders-none">No Shoulders</label>
                             </li>
-                            <li>
-                                <input type="radio" id="shoulders-leather" name="shoulders" data-file_male="torso/leather/shoulders_male.png" data-file_female="torso/leather/shoulders_female.png">
-                                <label for="shoulders-leather">Leather Shoulders</label>
-                            </li>
+                            <?php if(!empty($parts->armor->shoulders)): ?>
+                                <?php foreach($parts->armor->shoulders as $shoulders): ?>
+                                    <?php
+                                        $short = (!empty($shoulders->short) ? $shoulders->short : str_replace(' ', '', strtolower($shoulders->name)));
+                                        $path  = (!empty($shoulders->path) ? $shoulders->path : 'torso');
+                                        if(empty($shoulders->fullpath)) {
+                                            $path .= '/%SHORT%/%SEX%';
+                                        }
+                                        $path  = str_replace('%SHORT%', $short, $path);
+                                        $pathm = str_replace('%SEX%', 'male', $path);
+                                        $pathf = str_replace('%SEX%', 'female', $path);
+                                    ?>
+                                    <li>
+                                        <?php if((!empty($shoulders->colors) && $shoulders->colors == 'none') || (empty($parts->armor->colors) && empty($shoulders->colors))): ?>
+                                            <?php if(!empty($shoulders->opts)): ?>
+                                                <span class="condensed">
+                                            <?php endif; ?>
+                                                <?php
+                                                    $file    = (!empty($shoulders->file) ? $shoulders->file : $short);
+                                                    $file    = str_replace('%SHORT%', $short, $file);
+                                                    $filem   = str_replace('%SEX%', 'male', $file);
+                                                    $filef   = str_replace('%SEX%', 'female', $file);
+                                                    $sex     = '';
+                                                    if(empty($shoulders->opts)) {
+                                                        $sex     = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($shoulders->sex)) {
+                                                            $files = str_replace('%SEX%', $shoulders->sex, $file);
+                                                            $paths = str_replace('%SEX%', $shoulders->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                        }
+                                                    }
+                                                ?>
+                                                    <input type="radio" id="shoulders-<?php echo $short; ?>" name="shoulders"<?php echo (!empty($shoulders->sex) ? ' data-required="sex=' . $shoulders->sex . '"' : '') . $sex; ?>>
+                                                    <label for="shoulders-<?php echo $short; ?>"><?php echo $shoulders->name; ?><?php echo (!empty($shoulders->sex) ? ' <small>(' . ucfirst($shoulders->sex) . ' only)</small>' : ''); ?></label>
+                                            <?php if(!empty($shoulders->opts)): ?>
+                                                </span>
+                                                <ul>
+                                                    <?php foreach($shoulders->opts as $opt => $val): ?>
+                                                        <?php
+                                                            if(empty($val->short)) {
+                                                                $val->short = str_replace(' ', '', strtolower($opt));
+                                                            }
+                                                            $file    = (!empty($val->file) ? $val->file : $val->short);
+                                                            $file    = str_replace('%SHORT%', $short, $file);
+                                                            $filem   = str_replace('%SEX%', 'male', $file);
+                                                            $filef   = str_replace('%SEX%', 'female', $file);
+
+                                                            $path2   = (!empty($val->path) ? $val->path : $path);
+                                                            $path2m  = str_replace('%SEX%', 'male', $path2);
+                                                            $path2f  = str_replace('%SEX%', 'female', $path2);
+
+                                                            $sex     = ' data-file_male="' . $path2m . '/' . $filem . '.png" data-file_female="' . $path2f . '/' . $filef . '.png"';
+                                                            if(!empty($shoulders->sex)) {
+                                                                $files = str_replace('%SEX%', $shoulders->sex, $file);
+                                                                $paths = str_replace('%SEX%', $shoulders->sex, $path2);
+                                                                $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            }
+                                                        ?>
+                                                        <li>
+                                                            <input type="checkbox" id="shoulders<?php echo $short; ?>-<?php echo $val->short; ?>" name="shoulders<?php echo $short; ?>-<?php echo $val->short; ?>" data-required="shoulders=<?php echo $short; ?>"<?php echo $sex; ?> data-behind="true" data-preview_row="1">
+                                                            <label for="shoulders<?php echo $short; ?>-<?php echo $val->short; ?>"><?php echo $opt; ?></label>
+                                                        </li>
+                                                    <?php endforeach; ?>
+                                                </ul>
+                                            <?php endif; ?>
+                                        <?php else:
+                                            $colors = $parts->armor->colors;
+                                            if(!empty($shoulders->colors)) {
+                                                $colors = $shoulders->colors;
+                                            }
+                                        ?>
+                                            <span class="condensed"><?php echo $shoulders->name; ?><?php echo (!empty($shoulders->sex) ? ' <small>(' . ucfirst($shoulders->sex) . ' only)</small>' : ''); ?></span>
+                                            <ul>
+                                                <?php foreach($shoulders->colors as $color): ?>
+                                                    <?php
+                                                        $slug     = preg_replace('/-(\d)/', '$1', str_replace(' ', '-', strtolower($color)));
+                                                        $file     = (!empty($shoulders->file) ? $shoulders->file : $slug . '_' . $short . '_%SEX%');
+                                                        $file     = str_replace('%COLOR%', $slug, $file);
+                                                        $file     = str_replace('%SHORT%', $short, $file);
+                                                        $filem    = str_replace('%SEX%', 'male', $file);
+                                                        $filef    = str_replace('%SEX%', 'female', $file);
+
+                                                        $sex      = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($shoulders->sex)) {
+                                                            $files = str_replace('%SEX%', $shoulders->sex, $file);
+                                                            $paths = str_replace('%SEX%', $shoulders->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            $sex  .= ' data-required="sex=' . $shoulders->sex . '"';
+                                                        }
+                                                    ?>
+                                                    <li>
+                                                        <input type="radio" id="shoulders-<?php echo $short; ?>_<?php echo $slug; ?>" name="shoulders"<?php echo $sex; ?>>
+                                                        <label for="shoulders-<?php echo $short; ?>_<?php echo $slug; ?>"><?php echo $color; ?></label>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php endif; ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </ul>
                     </li>
                     <li><span class="condensed">Spikes</span>
@@ -473,10 +1028,106 @@
                                 <input type="radio" id="spikes-none" name="spikes" checked>
                                 <label for="spikes-none">No Spikes</label>
                             </li>
-                            <li>
-                                <input type="radio" id="spikes-gold" name="spikes" data-required="sex=male" data-file="torso/gold/spikes_male.png">
-                                <label for="spikes-gold">Gold Spikes <small>(Male only)</small></label>
-                            </li>
+                            <?php if(!empty($parts->armor->spikes)): ?>
+                                <?php foreach($parts->armor->spikes as $spikes): ?>
+                                    <?php
+                                        $short = (!empty($spikes->short) ? $spikes->short : str_replace(' ', '', strtolower($spikes->name)));
+                                        $path  = (!empty($spikes->path) ? $spikes->path : 'torso');
+                                        if(empty($spikes->fullpath)) {
+                                            $path .= '/%SHORT%/%SEX%';
+                                        }
+                                        $path  = str_replace('%SHORT%', $short, $path);
+                                        $pathm = str_replace('%SEX%', 'male', $path);
+                                        $pathf = str_replace('%SEX%', 'female', $path);
+                                    ?>
+                                    <li>
+                                        <?php if((!empty($spikes->colors) && $spikes->colors == 'none') || (empty($parts->armor->colors) && empty($spikes->colors))): ?>
+                                            <?php if(!empty($spikes->opts)): ?>
+                                                <span class="condensed">
+                                            <?php endif; ?>
+                                                <?php
+                                                    $file    = (!empty($spikes->file) ? $spikes->file : $short);
+                                                    $file    = str_replace('%SHORT%', $short, $file);
+                                                    $filem   = str_replace('%SEX%', 'male', $file);
+                                                    $filef   = str_replace('%SEX%', 'female', $file);
+                                                    $sex     = '';
+                                                    if(empty($spikes->opts)) {
+                                                        $sex     = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($spikes->sex)) {
+                                                            $files = str_replace('%SEX%', $spikes->sex, $file);
+                                                            $paths = str_replace('%SEX%', $spikes->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                        }
+                                                    }
+                                                ?>
+                                                    <input type="radio" id="spikes-<?php echo $short; ?>" name="spikes"<?php echo (!empty($spikes->sex) ? ' data-required="sex=' . $spikes->sex . '"' : '') . $sex; ?>>
+                                                    <label for="spikes-<?php echo $short; ?>"><?php echo $spikes->name; ?><?php echo (!empty($spikes->sex) ? ' <small>(' . ucfirst($spikes->sex) . ' only)</small>' : ''); ?></label>
+                                            <?php if(!empty($spikes->opts)): ?>
+                                                </span>
+                                                <ul>
+                                                    <?php foreach($spikes->opts as $opt => $val): ?>
+                                                        <?php
+                                                            if(empty($val->short)) {
+                                                                $val->short = str_replace(' ', '', strtolower($opt));
+                                                            }
+                                                            $file    = (!empty($val->file) ? $val->file : $val->short);
+                                                            $file    = str_replace('%SHORT%', $short, $file);
+                                                            $filem   = str_replace('%SEX%', 'male', $file);
+                                                            $filef   = str_replace('%SEX%', 'female', $file);
+
+                                                            $path2   = (!empty($val->path) ? $val->path : $path);
+                                                            $path2m  = str_replace('%SEX%', 'male', $path2);
+                                                            $path2f  = str_replace('%SEX%', 'female', $path2);
+
+                                                            $sex     = ' data-file_male="' . $path2m . '/' . $filem . '.png" data-file_female="' . $path2f . '/' . $filef . '.png"';
+                                                            if(!empty($spikes->sex)) {
+                                                                $files = str_replace('%SEX%', $spikes->sex, $file);
+                                                                $paths = str_replace('%SEX%', $spikes->sex, $path2);
+                                                                $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            }
+                                                        ?>
+                                                        <li>
+                                                            <input type="checkbox" id="spikes<?php echo $short; ?>-<?php echo $val->short; ?>" name="spikes<?php echo $short; ?>-<?php echo $val->short; ?>" data-required="spikes=<?php echo $short; ?>"<?php echo $sex; ?> data-behind="true" data-preview_row="1">
+                                                            <label for="spikes<?php echo $short; ?>-<?php echo $val->short; ?>"><?php echo $opt; ?></label>
+                                                        </li>
+                                                    <?php endforeach; ?>
+                                                </ul>
+                                            <?php endif; ?>
+                                        <?php else:
+                                            $colors = $parts->armor->colors;
+                                            if(!empty($spikes->colors)) {
+                                                $colors = $spikes->colors;
+                                            }
+                                        ?>
+                                            <span class="condensed"><?php echo $spikes->name; ?><?php echo (!empty($spikes->sex) ? ' <small>(' . ucfirst($spikes->sex) . ' only)</small>' : ''); ?></span>
+                                            <ul>
+                                                <?php foreach($spikes->colors as $color): ?>
+                                                    <?php
+                                                        $slug     = preg_replace('/-(\d)/', '$1', str_replace(' ', '-', strtolower($color)));
+                                                        $file     = (!empty($spikes->file) ? $spikes->file : $slug . '_' . $short . '_%SEX%');
+                                                        $file     = str_replace('%COLOR%', $slug, $file);
+                                                        $file     = str_replace('%SHORT%', $short, $file);
+                                                        $filem    = str_replace('%SEX%', 'male', $file);
+                                                        $filef    = str_replace('%SEX%', 'female', $file);
+
+                                                        $sex      = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($spikes->sex)) {
+                                                            $files = str_replace('%SEX%', $spikes->sex, $file);
+                                                            $paths = str_replace('%SEX%', $spikes->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            $sex  .= ' data-required="sex=' . $spikes->sex . '"';
+                                                        }
+                                                    ?>
+                                                    <li>
+                                                        <input type="radio" id="spikes-<?php echo $short; ?>_<?php echo $slug; ?>" name="spikes"<?php echo $sex; ?>>
+                                                        <label for="spikes-<?php echo $short; ?>_<?php echo $slug; ?>"><?php echo $color; ?></label>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php endif; ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </ul>
                     </li>
                     <li><span class="condensed">Bracers</span>
@@ -485,14 +1136,106 @@
                                 <input type="radio" id="bracers-none" name="bracers" checked>
                                 <label for="bracers-none">No Bracers</label>
                             </li>
-                            <li>
-                                <input type="radio" id="bracers-cloth" name="bracers" data-required="sex=female" data-file="hands/bracers/female/cloth_bracers_female.png">
-                                <label for="bracers-cloth">Cloth Bracers <small>(Female only)</small></label>
-                            </li>
-                            <li>
-                                <input type="radio" id="bracers-leather" name="bracers" data-file_male="hands/bracers/male/leather_bracers_male.png" data-file_female="hands/bracers/female/leather_bracers_female.png">
-                                <label for="bracers-leather">Leather Bracers</label>
-                            </li>
+                            <?php if(!empty($parts->armor->bracers)): ?>
+                                <?php foreach($parts->armor->bracers as $bracers): ?>
+                                    <?php
+                                        $short = (!empty($bracers->short) ? $bracers->short : str_replace(' ', '', strtolower($bracers->name)));
+                                        $path  = (!empty($bracers->path) ? $bracers->path : 'hands/bracers');
+                                        if(empty($bracers->fullpath)) {
+                                            $path .= '/%SHORT%/%SEX%';
+                                        }
+                                        $path  = str_replace('%SHORT%', $short, $path);
+                                        $pathm = str_replace('%SEX%', 'male', $path);
+                                        $pathf = str_replace('%SEX%', 'female', $path);
+                                    ?>
+                                    <li>
+                                        <?php if((!empty($bracers->colors) && $bracers->colors == 'none') || (empty($parts->armor->colors) && empty($bracers->colors))): ?>
+                                            <?php if(!empty($bracers->opts)): ?>
+                                                <span class="condensed">
+                                            <?php endif; ?>
+                                                <?php
+                                                    $file    = (!empty($bracers->file) ? $bracers->file : $short);
+                                                    $file    = str_replace('%SHORT%', $short, $file);
+                                                    $filem   = str_replace('%SEX%', 'male', $file);
+                                                    $filef   = str_replace('%SEX%', 'female', $file);
+                                                    $sex     = '';
+                                                    if(empty($bracers->opts)) {
+                                                        $sex     = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($bracers->sex)) {
+                                                            $files = str_replace('%SEX%', $bracers->sex, $file);
+                                                            $paths = str_replace('%SEX%', $bracers->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                        }
+                                                    }
+                                                ?>
+                                                    <input type="radio" id="bracers-<?php echo $short; ?>" name="bracers"<?php echo (!empty($bracers->sex) ? ' data-required="sex=' . $bracers->sex . '"' : '') . $sex; ?>>
+                                                    <label for="bracers-<?php echo $short; ?>"><?php echo $bracers->name; ?><?php echo (!empty($bracers->sex) ? ' <small>(' . ucfirst($bracers->sex) . ' only)</small>' : ''); ?></label>
+                                            <?php if(!empty($bracers->opts)): ?>
+                                                </span>
+                                                <ul>
+                                                    <?php foreach($bracers->opts as $opt => $val): ?>
+                                                        <?php
+                                                            if(empty($val->short)) {
+                                                                $val->short = str_replace(' ', '', strtolower($opt));
+                                                            }
+                                                            $file    = (!empty($val->file) ? $val->file : $val->short);
+                                                            $file    = str_replace('%SHORT%', $short, $file);
+                                                            $filem   = str_replace('%SEX%', 'male', $file);
+                                                            $filef   = str_replace('%SEX%', 'female', $file);
+
+                                                            $path2   = (!empty($val->path) ? $val->path : $path);
+                                                            $path2m  = str_replace('%SEX%', 'male', $path2);
+                                                            $path2f  = str_replace('%SEX%', 'female', $path2);
+
+                                                            $sex     = ' data-file_male="' . $path2m . '/' . $filem . '.png" data-file_female="' . $path2f . '/' . $filef . '.png"';
+                                                            if(!empty($bracers->sex)) {
+                                                                $files = str_replace('%SEX%', $bracers->sex, $file);
+                                                                $paths = str_replace('%SEX%', $bracers->sex, $path2);
+                                                                $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            }
+                                                        ?>
+                                                        <li>
+                                                            <input type="checkbox" id="bracers<?php echo $short; ?>-<?php echo $val->short; ?>" name="bracers<?php echo $short; ?>-<?php echo $val->short; ?>" data-required="bracers=<?php echo $short; ?>"<?php echo $sex; ?> data-behind="true" data-preview_row="1">
+                                                            <label for="bracers<?php echo $short; ?>-<?php echo $val->short; ?>"><?php echo $opt; ?></label>
+                                                        </li>
+                                                    <?php endforeach; ?>
+                                                </ul>
+                                            <?php endif; ?>
+                                        <?php else:
+                                            $colors = $parts->armor->colors;
+                                            if(!empty($bracers->colors)) {
+                                                $colors = $bracers->colors;
+                                            }
+                                        ?>
+                                            <span class="condensed"><?php echo $bracers->name; ?><?php echo (!empty($bracers->sex) ? ' <small>(' . ucfirst($bracers->sex) . ' only)</small>' : ''); ?></span>
+                                            <ul>
+                                                <?php foreach($bracers->colors as $color): ?>
+                                                    <?php
+                                                        $slug     = preg_replace('/-(\d)/', '$1', str_replace(' ', '-', strtolower($color)));
+                                                        $file     = (!empty($bracers->file) ? $bracers->file : $slug . '_' . $short . '_%SEX%');
+                                                        $file     = str_replace('%COLOR%', $slug, $file);
+                                                        $file     = str_replace('%SHORT%', $short, $file);
+                                                        $filem    = str_replace('%SEX%', 'male', $file);
+                                                        $filef    = str_replace('%SEX%', 'female', $file);
+
+                                                        $sex      = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($bracers->sex)) {
+                                                            $files = str_replace('%SEX%', $bracers->sex, $file);
+                                                            $paths = str_replace('%SEX%', $bracers->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            $sex  .= ' data-required="sex=' . $bracers->sex . '"';
+                                                        }
+                                                    ?>
+                                                    <li>
+                                                        <input type="radio" id="bracers-<?php echo $short; ?>_<?php echo $slug; ?>" name="bracers"<?php echo $sex; ?>>
+                                                        <label for="bracers-<?php echo $short; ?>_<?php echo $slug; ?>"><?php echo $color; ?></label>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php endif; ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </ul>
                     </li>
                     <li><span class="condensed">Greaves</span>
@@ -501,14 +1244,106 @@
                                 <input type="radio" id="greaves-none" name="greaves" checked>
                                 <label for="greaves-none">No Greaves</label>
                             </li>
-                            <li>
-                                <input type="radio" id="greaves-metal" name="greaves" data-file_male="legs/armor/male/metal_pants_male.png" data-file_female="legs/armor/female/metal_pants_female.png">
-                                <label for="greaves-metal">Metal Greaves</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="greaves-golden" name="greaves" data-file_male="legs/armor/male/golden_greaves_male.png" data-file_female="legs/armor/female/golden_greaves_female.png">
-                                <label for="greaves-golden">Golden Greaves</label>
-                            </li>
+                            <?php if(!empty($parts->armor->greaves)): ?>
+                                <?php foreach($parts->armor->greaves as $greaves): ?>
+                                    <?php
+                                        $short = (!empty($greaves->short) ? $greaves->short : str_replace(' ', '', strtolower($greaves->name)));
+                                        $path  = (!empty($greaves->path) ? $greaves->path : 'legs/armor');
+                                        if(empty($greaves->fullpath)) {
+                                            $path .= '/%SHORT%/%SEX%';
+                                        }
+                                        $path  = str_replace('%SHORT%', $short, $path);
+                                        $pathm = str_replace('%SEX%', 'male', $path);
+                                        $pathf = str_replace('%SEX%', 'female', $path);
+                                    ?>
+                                    <li>
+                                        <?php if((!empty($greaves->colors) && $greaves->colors == 'none') || (empty($parts->armor->colors) && empty($greaves->colors))): ?>
+                                            <?php if(!empty($greaves->opts)): ?>
+                                                <span class="condensed">
+                                            <?php endif; ?>
+                                                <?php
+                                                    $file    = (!empty($greaves->file) ? $greaves->file : $short);
+                                                    $file    = str_replace('%SHORT%', $short, $file);
+                                                    $filem   = str_replace('%SEX%', 'male', $file);
+                                                    $filef   = str_replace('%SEX%', 'female', $file);
+                                                    $sex     = '';
+                                                    if(empty($greaves->opts)) {
+                                                        $sex     = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($greaves->sex)) {
+                                                            $files = str_replace('%SEX%', $greaves->sex, $file);
+                                                            $paths = str_replace('%SEX%', $greaves->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                        }
+                                                    }
+                                                ?>
+                                                    <input type="radio" id="greaves-<?php echo $short; ?>" name="greaves"<?php echo (!empty($greaves->sex) ? ' data-required="sex=' . $greaves->sex . '"' : '') . $sex; ?>>
+                                                    <label for="greaves-<?php echo $short; ?>"><?php echo $greaves->name; ?><?php echo (!empty($greaves->sex) ? ' <small>(' . ucfirst($greaves->sex) . ' only)</small>' : ''); ?></label>
+                                            <?php if(!empty($greaves->opts)): ?>
+                                                </span>
+                                                <ul>
+                                                    <?php foreach($greaves->opts as $opt => $val): ?>
+                                                        <?php
+                                                            if(empty($val->short)) {
+                                                                $val->short = str_replace(' ', '', strtolower($opt));
+                                                            }
+                                                            $file    = (!empty($val->file) ? $val->file : $val->short);
+                                                            $file    = str_replace('%SHORT%', $short, $file);
+                                                            $filem   = str_replace('%SEX%', 'male', $file);
+                                                            $filef   = str_replace('%SEX%', 'female', $file);
+
+                                                            $path2   = (!empty($val->path) ? $val->path : $path);
+                                                            $path2m  = str_replace('%SEX%', 'male', $path2);
+                                                            $path2f  = str_replace('%SEX%', 'female', $path2);
+
+                                                            $sex     = ' data-file_male="' . $path2m . '/' . $filem . '.png" data-file_female="' . $path2f . '/' . $filef . '.png"';
+                                                            if(!empty($greaves->sex)) {
+                                                                $files = str_replace('%SEX%', $greaves->sex, $file);
+                                                                $paths = str_replace('%SEX%', $greaves->sex, $path2);
+                                                                $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            }
+                                                        ?>
+                                                        <li>
+                                                            <input type="checkbox" id="greaves<?php echo $short; ?>-<?php echo $val->short; ?>" name="greaves<?php echo $short; ?>-<?php echo $val->short; ?>" data-required="greaves=<?php echo $short; ?>"<?php echo $sex; ?> data-behind="true" data-preview_row="1">
+                                                            <label for="greaves<?php echo $short; ?>-<?php echo $val->short; ?>"><?php echo $opt; ?></label>
+                                                        </li>
+                                                    <?php endforeach; ?>
+                                                </ul>
+                                            <?php endif; ?>
+                                        <?php else:
+                                            $colors = $parts->armor->colors;
+                                            if(!empty($greaves->colors)) {
+                                                $colors = $greaves->colors;
+                                            }
+                                        ?>
+                                            <span class="condensed"><?php echo $greaves->name; ?><?php echo (!empty($greaves->sex) ? ' <small>(' . ucfirst($greaves->sex) . ' only)</small>' : ''); ?></span>
+                                            <ul>
+                                                <?php foreach($greaves->colors as $color): ?>
+                                                    <?php
+                                                        $slug     = preg_replace('/-(\d)/', '$1', str_replace(' ', '-', strtolower($color)));
+                                                        $file     = (!empty($greaves->file) ? $greaves->file : $slug . '_' . $short . '_%SEX%');
+                                                        $file     = str_replace('%COLOR%', $slug, $file);
+                                                        $file     = str_replace('%SHORT%', $short, $file);
+                                                        $filem    = str_replace('%SEX%', 'male', $file);
+                                                        $filef    = str_replace('%SEX%', 'female', $file);
+
+                                                        $sex      = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($greaves->sex)) {
+                                                            $files = str_replace('%SEX%', $greaves->sex, $file);
+                                                            $paths = str_replace('%SEX%', $greaves->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            $sex  .= ' data-required="sex=' . $greaves->sex . '"';
+                                                        }
+                                                    ?>
+                                                    <li>
+                                                        <input type="radio" id="greaves-<?php echo $short; ?>_<?php echo $slug; ?>" name="greaves"<?php echo $sex; ?>>
+                                                        <label for="greaves-<?php echo $short; ?>_<?php echo $slug; ?>"><?php echo $color; ?></label>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php endif; ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </ul>
                     </li>
                     <li><span class="condensed">Gloves</span>
@@ -517,14 +1352,106 @@
                                 <input type="radio" id="gloves-none" name="gloves" checked>
                                 <label for="gloves-none">No Gloves</label>
                             </li>
-                            <li>
-                                <input type="radio" id="gloves-metal" name="gloves" data-file_male="hands/gloves/male/metal_gloves_male.png" data-file_female="hands/gloves/female/metal_gloves_female.png">
-                                <label for="gloves-metal">Metal Gloves</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="gloves-golden" name="gloves" data-file_male="hands/gloves/male/golden_gloves_male.png" data-file_female="hands/gloves/female/golden_gloves_female.png">
-                                <label for="gloves-golden">Golden Gloves</label>
-                            </li>
+                            <?php if(!empty($parts->armor->gloves)): ?>
+                                <?php foreach($parts->armor->gloves as $gloves): ?>
+                                    <?php
+                                        $short = (!empty($gloves->short) ? $gloves->short : str_replace(' ', '', strtolower($gloves->name)));
+                                        $path  = (!empty($gloves->path) ? $gloves->path : 'hands/gloves');
+                                        if(empty($gloves->fullpath)) {
+                                            $path .= '/%SHORT%/%SEX%';
+                                        }
+                                        $path  = str_replace('%SHORT%', $short, $path);
+                                        $pathm = str_replace('%SEX%', 'male', $path);
+                                        $pathf = str_replace('%SEX%', 'female', $path);
+                                    ?>
+                                    <li>
+                                        <?php if((!empty($gloves->colors) && $gloves->colors == 'none') || (empty($parts->armor->colors) && empty($gloves->colors))): ?>
+                                            <?php if(!empty($gloves->opts)): ?>
+                                                <span class="condensed">
+                                            <?php endif; ?>
+                                                <?php
+                                                    $file    = (!empty($gloves->file) ? $gloves->file : $short);
+                                                    $file    = str_replace('%SHORT%', $short, $file);
+                                                    $filem   = str_replace('%SEX%', 'male', $file);
+                                                    $filef   = str_replace('%SEX%', 'female', $file);
+                                                    $sex     = '';
+                                                    if(empty($gloves->opts)) {
+                                                        $sex     = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($gloves->sex)) {
+                                                            $files = str_replace('%SEX%', $gloves->sex, $file);
+                                                            $paths = str_replace('%SEX%', $gloves->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                        }
+                                                    }
+                                                ?>
+                                                    <input type="radio" id="gloves-<?php echo $short; ?>" name="gloves"<?php echo (!empty($gloves->sex) ? ' data-required="sex=' . $gloves->sex . '"' : '') . $sex; ?>>
+                                                    <label for="gloves-<?php echo $short; ?>"><?php echo $gloves->name; ?><?php echo (!empty($gloves->sex) ? ' <small>(' . ucfirst($gloves->sex) . ' only)</small>' : ''); ?></label>
+                                            <?php if(!empty($gloves->opts)): ?>
+                                                </span>
+                                                <ul>
+                                                    <?php foreach($gloves->opts as $opt => $val): ?>
+                                                        <?php
+                                                            if(empty($val->short)) {
+                                                                $val->short = str_replace(' ', '', strtolower($opt));
+                                                            }
+                                                            $file    = (!empty($val->file) ? $val->file : $val->short);
+                                                            $file    = str_replace('%SHORT%', $short, $file);
+                                                            $filem   = str_replace('%SEX%', 'male', $file);
+                                                            $filef   = str_replace('%SEX%', 'female', $file);
+
+                                                            $path2   = (!empty($val->path) ? $val->path : $path);
+                                                            $path2m  = str_replace('%SEX%', 'male', $path2);
+                                                            $path2f  = str_replace('%SEX%', 'female', $path2);
+
+                                                            $sex     = ' data-file_male="' . $path2m . '/' . $filem . '.png" data-file_female="' . $path2f . '/' . $filef . '.png"';
+                                                            if(!empty($gloves->sex)) {
+                                                                $files = str_replace('%SEX%', $gloves->sex, $file);
+                                                                $paths = str_replace('%SEX%', $gloves->sex, $path2);
+                                                                $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            }
+                                                        ?>
+                                                        <li>
+                                                            <input type="checkbox" id="gloves<?php echo $short; ?>-<?php echo $val->short; ?>" name="gloves<?php echo $short; ?>-<?php echo $val->short; ?>" data-required="gloves=<?php echo $short; ?>"<?php echo $sex; ?> data-behind="true" data-preview_row="1">
+                                                            <label for="gloves<?php echo $short; ?>-<?php echo $val->short; ?>"><?php echo $opt; ?></label>
+                                                        </li>
+                                                    <?php endforeach; ?>
+                                                </ul>
+                                            <?php endif; ?>
+                                        <?php else:
+                                            $colors = $parts->armor->colors;
+                                            if(!empty($gloves->colors)) {
+                                                $colors = $gloves->colors;
+                                            }
+                                        ?>
+                                            <span class="condensed"><?php echo $gloves->name; ?><?php echo (!empty($gloves->sex) ? ' <small>(' . ucfirst($gloves->sex) . ' only)</small>' : ''); ?></span>
+                                            <ul>
+                                                <?php foreach($gloves->colors as $color): ?>
+                                                    <?php
+                                                        $slug     = preg_replace('/-(\d)/', '$1', str_replace(' ', '-', strtolower($color)));
+                                                        $file     = (!empty($gloves->file) ? $gloves->file : $slug . '_' . $short . '_%SEX%');
+                                                        $file     = str_replace('%COLOR%', $slug, $file);
+                                                        $file     = str_replace('%SHORT%', $short, $file);
+                                                        $filem    = str_replace('%SEX%', 'male', $file);
+                                                        $filef    = str_replace('%SEX%', 'female', $file);
+
+                                                        $sex      = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($gloves->sex)) {
+                                                            $files = str_replace('%SEX%', $gloves->sex, $file);
+                                                            $paths = str_replace('%SEX%', $gloves->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            $sex  .= ' data-required="sex=' . $gloves->sex . '"';
+                                                        }
+                                                    ?>
+                                                    <li>
+                                                        <input type="radio" id="gloves-<?php echo $short; ?>_<?php echo $slug; ?>" name="gloves"<?php echo $sex; ?>>
+                                                        <label for="gloves-<?php echo $short; ?>_<?php echo $slug; ?>"><?php echo $color; ?></label>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php endif; ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </ul>
                     </li>
                     <li><span class="condensed">Shoes</span>
@@ -533,60 +1460,106 @@
                                 <input type="radio" id="shoes-none" name="shoes" checked>
                                 <label for="shoes-none">No Shoes</label>
                             </li>
-                            <li>
-                                <span class="condensed">Shoes</span>
-                                <ul>
+                            <?php if(!empty($parts->clothes->shoes)): ?>
+                                <?php foreach($parts->clothes->shoes as $shoes): ?>
+                                    <?php
+                                        $short = (!empty($shoes->short) ? $shoes->short : str_replace(' ', '', strtolower($shoes->name)));
+                                        $path  = (!empty($shoes->path) ? $shoes->path : 'feet');
+                                        if(empty($shoes->fullpath)) {
+                                            $path .= '/%SHORT%/%SEX%';
+                                        }
+                                        $path  = str_replace('%SHORT%', $short, $path);
+                                        $pathm = str_replace('%SEX%', 'male', $path);
+                                        $pathf = str_replace('%SEX%', 'female', $path);
+                                    ?>
                                     <li>
-                                        <input type="radio" id="shoes_black" name="shoes" data-file_male="feet/shoes/male/black_shoes_male.png" data-file_female="feet/shoes/female/black_shoes_female.png">
-                                        <label for="shoes_black">Black Shoes</label>
+                                        <?php if((!empty($shoes->colors) && $shoes->colors == 'none') || (empty($parts->armor->colors) && empty($shoes->colors))): ?>
+                                            <?php if(!empty($shoes->opts)): ?>
+                                                <span class="condensed">
+                                            <?php endif; ?>
+                                                <?php
+                                                    $file    = (!empty($shoes->file) ? $shoes->file : $short);
+                                                    $file    = str_replace('%SHORT%', $short, $file);
+                                                    $filem   = str_replace('%SEX%', 'male', $file);
+                                                    $filef   = str_replace('%SEX%', 'female', $file);
+                                                    $sex     = '';
+                                                    if(empty($shoes->opts)) {
+                                                        $sex     = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($shoes->sex)) {
+                                                            $files = str_replace('%SEX%', $shoes->sex, $file);
+                                                            $paths = str_replace('%SEX%', $shoes->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                        }
+                                                    }
+                                                ?>
+                                                    <input type="radio" id="shoes-<?php echo $short; ?>" name="shoes"<?php echo (!empty($shoes->sex) ? ' data-required="sex=' . $shoes->sex . '"' : '') . $sex; ?>>
+                                                    <label for="shoes-<?php echo $short; ?>"><?php echo $shoes->name; ?><?php echo (!empty($shoes->sex) ? ' <small>(' . ucfirst($shoes->sex) . ' only)</small>' : ''); ?></label>
+                                            <?php if(!empty($shoes->opts)): ?>
+                                                </span>
+                                                <ul>
+                                                    <?php foreach($shoes->opts as $opt => $val): ?>
+                                                        <?php
+                                                            if(empty($val->short)) {
+                                                                $val->short = str_replace(' ', '', strtolower($opt));
+                                                            }
+                                                            $file    = (!empty($val->file) ? $val->file : $val->short);
+                                                            $file    = str_replace('%SHORT%', $short, $file);
+                                                            $filem   = str_replace('%SEX%', 'male', $file);
+                                                            $filef   = str_replace('%SEX%', 'female', $file);
+
+                                                            $path2   = (!empty($val->path) ? $val->path : $path);
+                                                            $path2m  = str_replace('%SEX%', 'male', $path2);
+                                                            $path2f  = str_replace('%SEX%', 'female', $path2);
+
+                                                            $sex     = ' data-file_male="' . $path2m . '/' . $filem . '.png" data-file_female="' . $path2f . '/' . $filef . '.png"';
+                                                            if(!empty($shoes->sex)) {
+                                                                $files = str_replace('%SEX%', $shoes->sex, $file);
+                                                                $paths = str_replace('%SEX%', $shoes->sex, $path2);
+                                                                $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            }
+                                                        ?>
+                                                        <li>
+                                                            <input type="checkbox" id="shoes<?php echo $short; ?>-<?php echo $val->short; ?>" name="shoes<?php echo $short; ?>-<?php echo $val->short; ?>" data-required="shoes=<?php echo $short; ?>"<?php echo $sex; ?> data-behind="true" data-preview_row="1">
+                                                            <label for="shoes<?php echo $short; ?>-<?php echo $val->short; ?>"><?php echo $opt; ?></label>
+                                                        </li>
+                                                    <?php endforeach; ?>
+                                                </ul>
+                                            <?php endif; ?>
+                                        <?php else:
+                                            $colors = $parts->armor->colors;
+                                            if(!empty($shoes->colors)) {
+                                                $colors = $shoes->colors;
+                                            }
+                                        ?>
+                                            <span class="condensed"><?php echo $shoes->name; ?><?php echo (!empty($shoes->sex) ? ' <small>(' . ucfirst($shoes->sex) . ' only)</small>' : ''); ?></span>
+                                            <ul>
+                                                <?php foreach($shoes->colors as $color): ?>
+                                                    <?php
+                                                        $slug     = preg_replace('/-(\d)/', '$1', str_replace(' ', '-', strtolower($color)));
+                                                        $file     = (!empty($shoes->file) ? $shoes->file : $slug . '_' . $short . '_%SEX%');
+                                                        $file     = str_replace('%COLOR%', $slug, $file);
+                                                        $file     = str_replace('%SHORT%', $short, $file);
+                                                        $filem    = str_replace('%SEX%', 'male', $file);
+                                                        $filef    = str_replace('%SEX%', 'female', $file);
+
+                                                        $sex      = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
+                                                        if(!empty($shoes->sex)) {
+                                                            $files = str_replace('%SEX%', $shoes->sex, $file);
+                                                            $paths = str_replace('%SEX%', $shoes->sex, $path);
+                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
+                                                            $sex  .= ' data-required="sex=' . $shoes->sex . '"';
+                                                        }
+                                                    ?>
+                                                    <li>
+                                                        <input type="radio" id="shoes-<?php echo $short; ?>_<?php echo $slug; ?>" name="shoes"<?php echo $sex; ?>>
+                                                        <label for="shoes-<?php echo $short; ?>_<?php echo $slug; ?>"><?php echo $color; ?></label>
+                                                    </li>
+                                                <?php endforeach; ?>
+                                            </ul>
+                                        <?php endif; ?>
                                     </li>
-                                    <li>
-                                        <input type="radio" id="shoes_brown" name="shoes" data-file_male="feet/shoes/male/brown_shoes_male.png" data-file_female="feet/shoes/female/brown_shoes_female.png">
-                                        <label for="shoes_brown">Brown Shoes</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="shoes-maroon" name="shoes" data-file_male="feet/shoes/male/maroon_shoes_male.png" data-file_female="feet/shoes/female/maroon_shoes_female.png">
-                                        <label for="shoes-maroon">Maroon Shoes</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="shoes-sara" name="shoes" data-required="sex=female" data-file="feet/shoes/female/SaraShoes.png">
-                                        <label for="shoes-sara">Sara's Shoes <small>(Female only)</small></label>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <input type="radio" id="shoes-boots_metal" name="shoes" data-file_male="feet/armor/male/metal_boots_male.png" data-file_female="feet/armor/female/metal_boots_female.png">
-                                <label for="shoes-boots_metal">Metal Boots</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="shoes-boots_golden" name="shoes" data-file_male="feet/armor/male/golden_boots_male.png" data-file_female="feet/armor/female/golden_boots_female.png">
-                                <label for="shoes-boots_golden">Golden Boots</label>
-                            </li>
-                            <li>
-                                <input type="radio" id="shoes-ghillies" name="shoes" data-required="sex=female" data-file="feet/ghillies_female_no_th-sh.png">
-                                <label for="shoes-ghillies">Ghillies <small>(Female only)</small> <small>(No Thrust/Shoot)</small></label>
-                            </li>
-                            <li>
-                                <span class="condensed">Slippers <small>(Female only)</small></span>
-                                <ul>
-                                    <li>
-                                        <input type="radio" id="shoes-slippers_black" name="shoes" data-required="sex=female" data-file="feet/slippers_female/black.png">
-                                        <label for="shoes-slippers_black">Black</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="shoes-slippers_brown" name="shoes" data-required="sex=female" data-file="feet/slippers_female/brown.png">
-                                        <label for="shoes-slippers_brown">Brown</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="shoes-slippers_gray" name="shoes" data-required="sex=female" data-file="feet/slippers_female/gray.png">
-                                        <label for="shoes-slippers_gray">Gray</label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="shoes-slippers_white" name="shoes" data-required="sex=female" data-file="feet/slippers_female/white.png">
-                                        <label for="shoes-slippers_white">White Slippers</label>
-                                    </li>
-                                </ul>
-                            </li>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </ul>
                     </li>
                     <li><span class="condensed">Belts</span>
@@ -1024,15 +1997,15 @@
                                 <label for="hair-none">Bald</label>
                             </li>
                             <?php if(!empty($parts->hair->styles)): ?>
-                                <?php foreach($parts->hair->styles as $name => $style): ?>
-                                    <?php $short = (!empty($style->short) ? $style->short : str_replace(' ', '', strtolower($name))); ?>
+                                <?php foreach($parts->hair->styles as $style): ?>
+                                    <?php $short = (!empty($style->short) ? $style->short : str_replace(' ', '', strtolower($style->name))); ?>
                                     <li>
                                         <?php if((!empty($style->colors) && $style->colors == 'none') || empty($parts->hair->colors)): ?>
                                             <?php if(!empty($style->opts)): ?>
                                                 <span class="condensed">
                                             <?php endif; ?>
                                                     <input type="radio" id="hair-<?php echo $short; ?>" name="hair"<?php echo (!empty($style->sex) ? ' data-required="sex=' . $style->sex . '"' : ''); ?>>
-                                                    <label for="hair-<?php echo $short; ?>"><?php echo $name; ?><?php echo (!empty($style->sex) ? ' <small>(' . ucfirst($style->sex) . ' only)</small>' : ''); ?></label>
+                                                    <label for="hair-<?php echo $short; ?>"><?php echo $style->name; ?><?php echo (!empty($style->sex) ? ' <small>(' . ucfirst($style->sex) . ' only)</small>' : ''); ?></label>
                                             <?php if(!empty($style->opts)): ?>
                                                 </span>
                                                 <ul>
@@ -1052,7 +2025,7 @@
                                                 </ul>
                                             <?php endif; ?>
                                         <?php else: ?>
-                                            <span class="condensed"><?php echo $name; ?><?php echo (!empty($style->sex) ? ' <small>(' . ucfirst($style->sex) . ' only)</small>' : ''); ?></span>
+                                            <span class="condensed"><?php echo $style->name; ?><?php echo (!empty($style->sex) ? ' <small>(' . ucfirst($style->sex) . ' only)</small>' : ''); ?></span>
                                             <ul>
                                                 <?php foreach($parts->hair->colors as $color): ?>
                                                     <?php

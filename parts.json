@@ -23,15 +23,19 @@
                 "name": "Tanned 2"
             },
             {
-                "name": "Orc"
+                "name": "Orc",
+                "shadows": "none"
             },
             {
                 "name": "Red Orc",
-                "short": "orc_red"
+                "short": "orc_red",
+                "file": "red_orc",
+                "shadows": "none"
             },
             {
                 "name": "Skeleton",
-                "sex": "male"
+                "sex": "male",
+                "shadows": "none"
             }
         ],
         "eyes": [
@@ -43,6 +47,32 @@
             "Red",
             "Yellow",
             "Orange"
+        ],
+        "nose": [
+            {
+                "name": "Big Nose",
+                "prohibited": [
+                    "orc",
+                    "orc_red",
+                    "skeleton"
+                ]
+            },
+            {
+                "name": "Button Nose",
+                "prohibited": [
+                    "orc",
+                    "orc_red",
+                    "skeleton"
+                ]
+            },
+            {
+                "name": "Straight Nose",
+                "prohibited": [
+                    "orc",
+                    "orc_red",
+                    "skeleton"
+                ]
+            }
         ],
         "ears": [
             {
@@ -71,62 +101,128 @@
             "Blue",
             "Blue 2",
             "Brown",
+            "Brown 2",
             "Brunette",
             "Brunette 2",
             "Dark Blonde",
+            "Gold",
             "Gray",
+            "Gray 2",
             "Green",
             "Green 2",
             "Light Blonde",
             "Light Blonde 2",
             "Pink",
             "Pink 2",
+            "Purple",
             "Raven",
             "Raven 2",
             "Redhead",
+            "Redhead 2",
             "Ruby Red",
             "White",
             "White Blonde",
             "White Blonde 2",
             "White Cyan"
         ],
-        "styles": {
-            "Plain": {},
-            "Short Bangs": {
+        "styles": [
+            {
+                "name": "Plain",
+                "shadows": true
+            },
+            {
+                "name": "Short Bangs",
                 "short": "bangsshort"
             },
-            "Long Bangs": {
+            {
+                "name": "Long Bangs",
                 "short": "bangslong"
             },
-            "Long Bangs 2": {
+            {
+                "name": "Long Bangs 2",
                 "short": "bangslong2"
             },
-            "Bedhead": {},
-            "Bunches": {},
-            "Long": {},
-            "Longhawk": {},
-            "Loose": {},
-            "Messy": {
+            {
+                "name": "Bedhead"
+            },
+            {
+                "name": "Bunches"
+            },
+            {
+                "name": "Jewfro"
+            },
+            {
+                "name": "Long"
+            },
+            {
+                "name": "Extra Long"
+            },
+            {
+                "name": "Longhawk"
+            },
+            {
+                "name": "Loose"
+            },
+            {
+                "name": "Messy",
                 "short": "messy1"
             },
-            "Messy 2": {},
-            "Mohawk": {},
-            "Page": {},
-            "Page 2": {},
-            "Parted": {},
-            "Ponytail": {},
-            "Ponytail 2": {},
-            "Princess": {},
-            "Shorthawk": {},
-            "Left Shoulder w/Braid": {
+            {
+                "name": "Messy 2"
+            },
+            {
+                "name": "Mohawk"
+            },
+            {
+                "name": "Page"
+            },
+            {
+                "name": "Page 2"
+            },
+            {
+                "name": "Parted"
+            },
+            {
+                "name": "Ponytail"
+            },
+            {
+                "name": "Ponytail 2",
+                "shadows": true
+            },
+            {
+                "name": "Princess"
+            },
+            {
+                "name": "Shorthawk"
+            },
+            {
+                "name": "Left Shoulder w/Braid",
                 "short": "shoulderl"
             },
-            "Right Shoulder w/Braid": {
+            {
+                "name": "Right Shoulder w/Braid",
                 "short": "shoulderr"
             },
-            "Swoop": {},
-            "Unkempt": {},
-            "Sara's Hair": {
+            {
+                "name": "Swoop"
+            },
+            {
+                "name": "Short Topknot",
+                "short": "shortknot"
+            },
+            {
+                "name": "Long Topknot",
+                "short": "longknot"
+            },
+            {
+                "name": "Extra Long Topknot",
+                "short": "xlongknot"
+            },
+            {
+                "name": "Unkempt"
+            },
+            {
+                "name": "Sara's Hair",
                 "colors": "none",
                 "short": "sara",
                 "sex": "female",
@@ -145,6 +241,513 @@
                     }
                 }
             }
-        }
+        ]
+    },
+    "clothes": {
+        "colors": [
+            "Black",
+            "Blue",
+            "Brown",
+            "Dark Brown",
+            "Dark Gray",
+            "Forest Green",
+            "Gray",
+            "Green",
+            "Lavender",
+            "Light Gray",
+            "Magenta",
+            "Maroon",
+            "Pink",
+            "Purple",
+            "Red",
+            "Teal",
+            "White",
+            "Yellow"
+        ],
+        "torso": [
+            {
+                "name": "Long Sleeve Shirt",
+                "short": "longsleeve",
+                "path": "torso/shirts",
+                "file": "%COLOR%_%SHORT%",
+                "sex": "male",
+                "colors": [
+                    "Brown",
+                    "Teal",
+                    "Maroon",
+                    "White"
+                ]
+            },
+            {
+                "name": "Sleeveless Shirt",
+                "short": "sleeveless",
+                "path": "torso/shirts",
+                "file": "%COLOR%_%SHORT%",
+                "sex": "female",
+                "colors": [
+                    "Brown",
+                    "Teal",
+                    "Maroon",
+                    "White"
+                ]
+            },
+            {
+                "name": "Pirate Shirt",
+                "short": "pirate",
+                "path": "torso/shirts/sleeveless/%SEX%",
+                "fullpath": true,
+                "file": "%COLOR%_%SHORT%",
+                "sex": "female",
+                "colors": [
+                    "Brown",
+                    "Teal",
+                    "Maroon",
+                    "White"
+                ]
+            },
+            {
+                "name": "Sleeveless Tunic",
+                "short": "tunic",
+                "path": "torso/tunics/%SEX%",
+                "fullpath": true,
+                "file": "%COLOR%_%SHORT%",
+                "sex": "female",
+                "colors": [
+                    "Brown",
+                    "Teal",
+                    "Maroon",
+                    "White"
+                ]
+            },
+            {
+                "name": "Sara's Shirt",
+                "short": "sara",
+                "sex": "female",
+                "colors": "none"
+            },
+            {
+                "name": "Formal Wear",
+                "short": "formal",
+                "sex": "male",
+                "path": "formal_male_no_th-sh",
+                "fullpath": true,
+                "colors": "none",
+                "opts": {
+                    "Shirt": {
+                        "short": "shirt"
+                    },
+                    "Vest": {
+                        "short": "vest"
+                    }
+                }
+            },
+            {
+                "name": "Dress with Sash",
+                "short": "dress_sash",
+                "path": "torso/dress_female",
+                "fullpath": true,
+                "file": "dress_w_sash_female",
+                "sex": "female",
+                "colors": "none"
+            },
+            {
+                "name": "Gown",
+                "path": "torso/dress_female",
+                "fullpath": true,
+                "sex": "female",
+                "colors": "none",
+                "opts": {
+                    "Underdress": {},
+                    "Overskirt": {},
+                    "Blue Vest": {
+                        "short": "blue_vest"
+                    }
+                }
+            },
+            {
+                "name": "Robe",
+                "path": "torso/robes_female_no_th-sh",
+                "fullpath": true,
+                "file": "%COLOR%",
+                "sex": "female",
+                "colors": [
+                    "Black",
+                    "Blue",
+                    "Brown",
+                    "Dark Brown",
+                    "Dark Gray",
+                    "Light Gray",
+                    "Forest Green",
+                    "Purple",
+                    "Red",
+                    "White"
+                ]
+            }
+        ],
+        "legs": [
+            {
+                "name": "Pants",
+                "colors": [
+                    "Magenta",
+                    "Red",
+                    "Teal",
+                    "White"
+                ]
+            },
+            {
+                "name": "Formal Pants",
+                "sex": "male",
+                "file": "pants",
+                "path": "formal_male_no_th-sh",
+                "fullpath": true,
+                "colors": "none"
+            },
+            {
+                "name": "Robe Skirt",
+                "short": "skirt",
+                "type": "skirt",
+                "sex": "male",
+                "file": "robe_skirt_%SEX%",
+                "colors": "none"
+            },
+            {
+                "name": "Sara's Leggings",
+                "short": "sara",
+                "sex": "female",
+                "file": "SaraLeggings",
+                "colors": "none"
+            }
+        ],
+        "shoes": [
+            {
+                "name": "Shoes",
+                "colors": [
+                    "Black",
+                    "Brown",
+                    "Maroon"
+                ]
+            },
+            {
+                "name": "Sara's Shoes",
+                "path": "feet/shoes/%SEX%",
+                "fullpath": true,
+                "file": "SaraShoes",
+                "sex": "female",
+                "colors": "none"
+            },
+            {
+                "name": "Metal Boots",
+                "path": "feet/armor/%SEX%",
+                "fullpath": true,
+                "file": "metal_boots_%SEX%",
+                "colors": "none"
+            },
+            {
+                "name": "Golden Boots",
+                "path": "feet/armor/%SEX%",
+                "fullpath": true,
+                "file": "golden_boots_%SEX%",
+                "colors": "none"
+            },
+            {
+                "name": "Ghillies",
+                "fullpath": true,
+                "file": "ghillies_%SEX%_no_th-sh",
+                "sex": "female",
+                "colors": "none"
+            },
+            {
+                "name": "Slippers",
+                "path": "feet/%SHORT%_%SEX%",
+                "fullpath": true,
+                "file": "%COLOR%",
+                "sex": "female",
+                "colors": [
+                    "Black",
+                    "Brown",
+                    "Gray",
+                    "White"
+                ]
+            }
+        ],
+        "capes": [
+            {
+                "name": "Solid Cape",
+                "sex": "female"
+            },
+            {
+                "name": "Tattered Cape",
+                "sex": "female"
+            },
+            {
+                "name": "Trimmed Cape",
+                "sex": "female",
+                "trims": [
+                    {
+                        "name": "Blue",
+                        "colors": [
+                            "White"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "neck": [
+            {
+                "name": "Tie",
+                "path": "formal_male_no_th-sh",
+                "fullpath": true,
+                "file": "tie",
+                "sex": "male",
+                "colors": "none"
+            },
+            {
+                "name": "Bow Tie",
+                "path": "formal_male_no_th-sh",
+                "fullpath": true,
+                "file": "bowtie",
+                "sex": "male",
+                "colors": "none"
+            }
+        ],
+        "capeacc": [
+            {
+                "name": "Cape Clip",
+                "sex": "female"
+            },
+            {
+                "name": "Cape Tie",
+                "sex": "female"
+            }
+        ]
+    },
+    "armor": {
+        "mail": [
+            {
+                "name": "Chain Mail",
+                "short": "mail",
+                "path": "torso/chain",
+                "fullpath": true,
+                "file": "%SHORT%_%SEX%"
+            }
+        ],
+        "chest": [
+            {
+                "name": "Gold Chest",
+                "short": "chest_gold",
+                "path": "torso/gold",
+                "fullpath": true,
+                "file": "chest_%SEX%"
+            },
+            {
+                "name": "Leather Chest",
+                "short": "chest_leather",
+                "path": "torso/leather",
+                "fullpath": true,
+                "file": "chest_%SEX%"
+            },
+            {
+                "name": "Plate Chest",
+                "short": "chest_plate",
+                "path": "torso/plate",
+                "fullpath": true,
+                "file": "chest_%SEX%"
+            }
+        ],
+        "arms": [
+            {
+                "name": "Gold Chest",
+                "short": "chest_gold",
+                "path": "torso/gold",
+                "fullpath": true,
+                "file": "arms_%SEX%"
+            },
+            {
+                "name": "Plate Chest",
+                "short": "chest_plate",
+                "path": "torso/plate",
+                "fullpath": true,
+                "file": "arms_%SEX%"
+            }
+        ],
+        "greaves": [
+            {
+                "name": "Metal Greaves",
+                "short": "metal_pants",
+                "path": "legs/armor/%SEX%",
+                "fullpath": true,
+                "file": "%SHORT%_%SEX%"
+            },
+            {
+                "name": "Golden Greaves",
+                "short": "golden_greaves",
+                "path": "legs/armor/%SEX%",
+                "fullpath": true,
+                "file": "%SHORT%_%SEX%"
+            }
+        ],
+        "gloves": [
+            {
+                "name": "Metal Greaves",
+                "short": "metal_gloves",
+                "path": "hands/gloves/%SEX%",
+                "fullpath": true,
+                "file": "%SHORT%_%SEX%"
+            },
+            {
+                "name": "Golden Greaves",
+                "short": "golden_gloves",
+                "path": "hands/gloves/%SEX%",
+                "fullpath": true,
+                "file": "%SHORT%_%SEX%"
+            }
+        ],
+        "shoulders": [
+            {
+                "name": "Leather Shoulders",
+                "path": "torso/leather",
+                "fullpath": true,
+                "file": "shoulders_%SEX%"
+            }
+        ],
+        "spikes": [
+            {
+                "name": "Gold Spikes",
+                "path": "torso/gold",
+                "fullpath": true,
+                "file": "spikes_%SEX%",
+                "sex": "male"
+            }
+        ],
+        "bracers": [
+            {
+                "name": "Cloth Bracers",
+                "short": "cloth_bracers",
+                "path": "hands/bracers/%SEX%",
+                "fullpath": true,
+                "file": "%SHORT%_%SEX%",
+                "sex": "female"
+            },
+            {
+                "name": "Leather Bracers",
+                "short": "leather_bracers",
+                "path": "hands/bracers/%SEX%",
+                "fullpath": true,
+                "file": "%SHORT%_%SEX%"
+            }
+        ],
+        "jacket": [
+            {
+                "name": "Tabard",
+                "short": "tabard",
+                "path": "torso/chain/tabard",
+                "fullpath": true,
+                "file": "jacket_%SEX%"
+            }
+        ]
+    },
+    "equipment": {
+        "weapons": [
+            {
+                "name": "Bow",
+                "preview": "17",
+                "hand": "right",
+                "builds": {
+                    "Skeleton": {}
+                }
+            },
+            {
+                "name": "Dagger",
+                "hand": "right"
+            },
+            {
+                "name": "Great Bow",
+                "preview": "17",
+                "hand": "right"
+            },
+            {
+                "name": "Recurve Bow",
+                "preview": "17",
+                "hand": "right"
+            },
+            {
+                "name": "Spear",
+                "hand": "right"
+            },
+            {
+                "name": "Wood Wand",
+                "preview": "13",
+                "hand": "right"
+            },
+            {
+                "name": "Steel Wand",
+                "preview": "13",
+                "hand": "right"
+            },
+            {
+                "name": "Large Spear",
+                "oversize": "1",
+                "hand": "two"
+            },
+            {
+                "name": "Dragon Spear",
+                "oversize": "1",
+                "hand": "two"
+            },
+            {
+                "name": "Trident",
+                "oversize": "1",
+                "hand": "two"
+            },
+            {
+                "name": "Long Sword",
+                "oversize": "2",
+                "hand": "right"
+            },
+            {
+                "name": "Mace",
+                "oversize": "2",
+                "hand": "right"
+            },
+            {
+                "name": "Rapier",
+                "oversize": "2",
+                "hand": "right"
+            },
+            {
+                "name": "Saber",
+                "oversize": "2",
+                "hand": "right"
+            }
+        ],
+        "ammo": [
+            {
+                "name": "Arrow",
+                "sex": "either",
+                "preview": "17",
+                "hand": "left",
+                "builds": {
+                    "Skeleton": {}
+                }
+            }
+        ],
+        "shields": [
+            {
+                "name": "Shield",
+                "sex": "male",
+                "path": "weapons/left hand/male/",
+                "cutouts": {
+                    "no_hat": "shield_male_cutoutforbody.png",
+                    "hat": "shield_male_cutoutforhat.png"
+                }
+            }
+        ],
+        "quivers": [
+            {
+                "name": "Quiver",
+                "file": "behind_body/equipment/quiver.png",
+                "behind": true
+            }
+        ]
     }
 }
