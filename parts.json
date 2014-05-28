@@ -384,6 +384,20 @@
                 ]
             }
         ],
+        "vests": [
+            {
+                "name": "Corset",
+                "path": "torso/%SHORT%_%SEX%",
+                "fullpath": true,
+                "file": "%SHORT%_%COLOR%",
+                "sex": "female",
+                "colors": [
+                    "Black",
+                    "Brown",
+                    "Red"
+                ]
+            }
+        ],
         "legs": [
             {
                 "name": "Pants",
@@ -423,6 +437,15 @@
                 "name": "Shoes",
                 "colors": [
                     "Black",
+                    "Brown",
+                    "Maroon"
+                ]
+            },
+            {
+                "name": "Boots",
+                "sex": "female",
+                "file": "%COLOR%_longboots_%SEX%",
+                "colors": [
                     "Brown",
                     "Maroon"
                 ]
@@ -469,30 +492,48 @@
                     "White"
                 ]
             }
-        ],
-        "capes": [
-            {
-                "name": "Solid Cape",
-                "sex": "female"
-            },
-            {
-                "name": "Tattered Cape",
-                "sex": "female"
-            },
-            {
-                "name": "Trimmed Cape",
-                "sex": "female",
-                "trims": [
-                    {
-                        "name": "Blue",
-                        "colors": [
-                            "White"
-                        ]
-                    }
-                ]
-            }
+        ]
+    },
+    "accessories": {
+        "colors": [
+            "Black",
+            "Blue",
+            "Bronze",
+            "Brown",
+            "Dark Brown",
+            "Dark Gray",
+            "Forest Green",
+            "Gray",
+            "Green",
+            "Gold",
+            "Iron",
+            "Lavender",
+            "Light Gray",
+            "Magenta",
+            "Maroon",
+            "Pink",
+            "Purple",
+            "Red",
+            "Silver",
+            "Teal",
+            "White",
+            "Yellow"
         ],
         "neck": [
+            {
+                "name": "Necklace",
+                "path": "accessories/necklaces_%SEX%_ no_th-sh",
+                "fullpath": true,
+                "short": "buckle",
+                "file": "%COLOR%",
+                "sex": "female",
+                "colors": [
+                    "Bronze",
+                    "Iron",
+                    "Silver",
+                    "Gold"
+                ]
+            },
             {
                 "name": "Tie",
                 "path": "formal_male_no_th-sh",
@@ -510,14 +551,150 @@
                 "colors": "none"
             }
         ],
+        "bracelets": [
+            {
+                "name": "Bracelet",
+                "fullpath": true,
+                "colors": "none"
+            }
+        ],
+        "belts": [
+            {
+                "name": "Leather Belt",
+                "short": "leather",
+                "file": "%SHORT%_%SEX%",
+                "sex": "male",
+                "colors": "none"
+            },
+            {
+                "name": "Cloth Belt",
+                "short": "cloth",
+                "colors": [
+                    "White"
+                ]
+            },
+            {
+                "name": "Metal Belt",
+                "short": "metal",
+                "file": "%COLOR%_%SEX%_no_th-sh",
+                "sex": "female",
+                "colors": [
+                    "Bronze",
+                    "Iron",
+                    "Silver",
+                    "Gold"
+                ]
+            }
+        ],
+        "buckles": [
+            {
+                "name": "Buckle",
+                "path": "belt/buckles_%SEX%_no_th-sh/",
+                "fullpath": true,
+                "short": "buckle",
+                "file": "%COLOR%",
+                "sex": "female",
+                "colors": [
+                    "Bronze",
+                    "Iron",
+                    "Silver",
+                    "Gold"
+                ]
+            }
+        ],
+        "capes": [
+            {
+                "name": "Solid Cape",
+                "short": "normal",
+                "file": "cape_%COLOR%",
+                "sex": "female",
+                "colors": [
+                    "Black",
+                    "Blue",
+                    "Brown",
+                    "Gray",
+                    "Green",
+                    "Lavender",
+                    "Maroon",
+                    "Pink",
+                    "Red",
+                    "White",
+                    "Yellow"
+                ]
+            },
+            {
+                "name": "Tattered Cape",
+                "short": "tattered",
+                "file": "tattercape_%COLOR%",
+                "sex": "female",
+                "colors": [
+                    "Black",
+                    "Blue",
+                    "Brown",
+                    "Gray",
+                    "Green",
+                    "Lavender",
+                    "Maroon",
+                    "Pink",
+                    "Red",
+                    "White",
+                    "Yellow"
+                ]
+            },
+            {
+                "name": "Trimmed Cape",
+                "short": "trimmed",
+                "file": "trimcape_%COLOR%%TRIM%",
+                "back": "behind_body/cape/normal/%SEX%",
+                "behind": "cape_%COLOR%",
+                "fullback": true,
+                "sex": "female",
+                "colors": [
+                    {
+                        "name": "White",
+                        "trims": [
+                            "Blue"
+                        ]
+                    }
+                ]
+            }
+        ],
         "capeacc": [
             {
                 "name": "Cape Clip",
-                "sex": "female"
+                "sex": "female",
+                "file": "%SHORT%_%COLOR%",
+                "colors": [
+                    "Black",
+                    "Blue",
+                    "Brown",
+                    "Gray",
+                    "Green",
+                    "Lavender",
+                    "Maroon",
+                    "Pink",
+                    "Red",
+                    "White",
+                    "Yellow"
+                ]
             },
             {
                 "name": "Cape Tie",
-                "sex": "female"
+                "sex": "female",
+                "file": "%SHORT%_%COLOR%",
+                "colors": [
+                    "Black",
+                    "Blue",
+                    "Brown",
+                    "Gray",
+                    "Green",
+                    "Lavender",
+                    "Maroon",
+                    "Pink",
+                    "Red",
+                    "White",
+                    "Yellow"
+                ]
             }
         ]
     },
@@ -647,14 +824,23 @@
         ]
     },
     "equipment": {
+        "colors": [
+            "Left Hand",
+            "Right Hand"
+        ],
         "weapons": [
             {
                 "name": "Bow",
                 "preview": "17",
                 "hand": "right",
-                "builds": {
-                    "Skeleton": {}
-                }
+                "sex": "either"
+            },
+            {
+                "name": "Bow",
+                "preview": "17",
+                "hand": "right",
+                "sex": "either",
+                "body": "skeleton"
             },
             {
                 "name": "Dagger",
@@ -725,10 +911,7 @@
                 "name": "Arrow",
                 "sex": "either",
                 "preview": "17",
-                "hand": "left",
-                "builds": {
-                    "Skeleton": {}
-                }
+                "hand": "left"
             }
         ],
         "shields": [
