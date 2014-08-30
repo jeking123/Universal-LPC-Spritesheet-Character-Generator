@@ -55,22 +55,21 @@
                     <?php output_body(); ?>
                     <?php output_eyes(); ?>
                     <?php output_nose(); ?>
-                    <?php output_general($parts->clothes->legs, 'Legs', 'legs', 'legs'); ?>
-                    <?php output_general($parts->clothes->torso, 'Clothes', 'clothes', 'torso'); ?>
-                    <?php output_general($parts->clothes->vests, 'Vest', 'vest', 'torso/vest'); ?>
-                    <?php output_general($parts->armor->chest, 'Armor', 'armor', 'torso/chain'); ?>
-                    <?php output_general($parts->armor->jacket, 'Jacket', 'jacket', 'torso/chain'); ?>
-                    <?php output_general($parts->armor->arms, 'Jacket', 'arms', 'torso'); ?>
-                    <?php output_general($parts->armor->shoulders, 'Shoulders', 'shoulders', 'torso'); ?>
-                    <?php output_general($parts->armor->spikes, 'Spikes', 'shoulders', 'torso'); ?>
-                    <?php output_general($parts->armor->bracers, 'Bracers', 'bracers', 'hands/bracers'); ?>
-                    <?php output_general($parts->armor->greaves, 'Greaves', 'greaves', 'legs/armor'); ?>
-                    <?php output_general($parts->armor->gloves, 'Gloves', 'gloves', 'hands/gloves'); ?>
-                    <?php output_general($parts->clothes->shoes, 'Shoes', 'shoes', 'feet'); ?>
-                    <?php output_general($parts->accessories->belts, 'Belts', 'belt', 'belt'); ?>
-                    <?php output_general($parts->accessories->buckles, 'Buckles', 'buckle', 'belt'); ?>
-                    <?php output_general($parts->accessories->neck, 'Neck Accessory', 'neck', 'accessories/neck'); ?>
-                    <?php output_general($parts->accessories->bracelets, 'Bracelet', 'bracelet', 'hands/bracelets'); ?>
+                    <?php output_general($parts->clothes->legs, 'clothes', 'Legs', 'legs', 'legs'); ?>
+                    <?php output_general($parts->clothes->torso, 'clothes', 'Clothes', 'clothes', 'torso'); ?>
+                    <?php output_general($parts->clothes->vests, 'clothes', 'Vest', 'vest', 'torso/vest'); ?>
+                    <?php output_general($parts->armor->chest, 'armor', 'Armor', 'armor', 'torso/chain'); ?>
+                    <?php output_general($parts->armor->jacket, 'armor', 'Jacket', 'jacket', 'torso/chain'); ?>
+                    <?php output_general($parts->armor->arms, 'armor', 'Jacket', 'arms', 'torso'); ?>
+                    <?php output_general($parts->armor->shoulders, 'armor', 'Shoulders', 'shoulders', 'torso'); ?>
+                    <?php output_general($parts->armor->spikes, 'armor', 'Spikes', 'shoulders', 'torso'); ?>
+                    <?php output_general($parts->armor->bracers, 'armor', 'Bracers', 'bracers', 'hands/bracers'); ?>
+                    <?php output_general($parts->armor->greaves, 'armor', 'Greaves', 'greaves', 'legs/armor'); ?>
+                    <?php output_general($parts->armor->gloves, 'armor', 'Gloves', 'gloves', 'hands/gloves'); ?>
+                    <?php output_general($parts->clothes->shoes, 'clothes', 'Shoes', 'shoes', 'feet'); ?>
+                    <?php output_general($parts->accessories->belts, 'accessories', 'Belts', 'belt', 'belt'); ?>
+                    <?php output_general($parts->accessories->buckles, 'accessories', 'Buckles', 'buckle', 'belt'); ?>
+                    <?php output_general($parts->accessories->bracelets, 'accessories', 'Bracelet', 'bracelet', 'hands/bracelets'); ?>
                     <?php //output_general($parts->accessories->capes, 'Capes', 'cape', 'torso/back/cape', 'behind_body/cape'); ?>
                     <li><span class="condensed">Cape</span>
                         <ul>
@@ -232,142 +231,7 @@
                             <?php endif; ?>
                         </ul>
                     </li>
-                    <li><span class="condensed">Cape Neckpiece</span>
-                        <ul>
-                            <li>
-                                <input type="radio" id="capeacc-none" name="capeacc" checked>
-                                <label for="capeacc-none">No Cape Neckpiece</label>
-                            </li>
-                            <?php if(!empty($parts->accessories->capeacc)): ?>
-                                <?php foreach($parts->accessories->capeacc as $capeacc): ?>
-                                    <?php
-                                        $short = (!empty($capeacc->short) ? $capeacc->short : str_replace(' ', '', strtolower($capeacc->name)));
-                                        $path  = (!empty($capeacc->path) ? $capeacc->path : 'accessories/neck');
-                                        if(empty($capeacc->fullpath)) {
-                                            $path .= '/%SHORT%/%SEX%';
-                                        }
-                                        $path  = str_replace('%SHORT%', $short, $path);
-                                        $pathm = str_replace('%SEX%', 'male', $path);
-                                        $pathf = str_replace('%SEX%', 'female', $path);
-                                    ?>
-                                    <li>
-                                        <?php if((!empty($capeacc->colors) && $capeacc->colors == 'none') || (empty($parts->clothes->colors) && empty($capeacc->colors))): ?>
-                                            <?php if(!empty($capeacc->opts)): ?>
-                                                <span class="condensed">
-                                            <?php endif; ?>
-                                                <?php
-                                                    $file    = (!empty($capeacc->file) ? $capeacc->file : $short);
-                                                    $file    = str_replace('%SHORT%', $short, $file);
-                                                    $filem   = str_replace('%SEX%', 'male', $file);
-                                                    $filef   = str_replace('%SEX%', 'female', $file);
-                                                    $sex     = '';
-                                                    if(empty($capeacc->opts)) {
-                                                        $sex     = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
-                                                        if(!empty($capeacc->sex)) {
-                                                            $files = str_replace('%SEX%', $capeacc->sex, $file);
-                                                            $paths = str_replace('%SEX%', $capeacc->sex, $path);
-                                                            $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
-                                                        }
-                                                    }
-                                                ?>
-                                                    <input type="radio" id="capeacc-<?php echo $short; ?>" name="capeacc"<?php echo (!empty($capeacc->sex) ? ' data-required="sex=' . $capeacc->sex . '"' : '') . $sex; ?>>
-                                                    <label for="capeacc-<?php echo $short; ?>"><?php echo $capeacc->name; ?><?php echo (!empty($capeacc->sex) ? ' <small>(' . ucfirst($capeacc->sex) . ' only)</small>' : ''); ?></label>
-                                            <?php if(!empty($capeacc->opts)): ?>
-                                                </span>
-                                                <ul>
-                                                    <?php foreach($capeacc->opts as $opt => $val): ?>
-                                                        <?php
-                                                            if(empty($val->short)) {
-                                                                $val->short = str_replace(' ', '', strtolower($opt));
-                                                            }
-                                                            $file    = (!empty($val->file) ? $val->file : $val->short);
-                                                            $file    = str_replace('%SHORT%', $short, $file);
-                                                            $filem   = str_replace('%SEX%', 'male', $file);
-                                                            $filef   = str_replace('%SEX%', 'female', $file);
-
-                                                            $path2   = (!empty($val->path) ? $val->path : $path);
-                                                            $path2m  = str_replace('%SEX%', 'male', $path2);
-                                                            $path2f  = str_replace('%SEX%', 'female', $path2);
-
-                                                            $sex     = ' data-file_male="' . $path2m . '/' . $filem . '.png" data-file_female="' . $path2f . '/' . $filef . '.png"';
-                                                            if(!empty($capeacc->sex)) {
-                                                                $files = str_replace('%SEX%', $capeacc->sex, $file);
-                                                                $paths = str_replace('%SEX%', $capeacc->sex, $path2);
-                                                                $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
-                                                            }
-                                                        ?>
-                                                        <li>
-                                                            <input type="checkbox" id="capeacc<?php echo $short; ?>-<?php echo $val->short; ?>" name="capeacc<?php echo $short; ?>-<?php echo $val->short; ?>" data-required="capeacc=<?php echo $short; ?>"<?php echo $sex; ?> data-behind="true" data-preview_row="1">
-                                                            <label for="capeacc<?php echo $short; ?>-<?php echo $val->short; ?>"><?php echo $opt; ?></label>
-                                                        </li>
-                                                    <?php endforeach; ?>
-                                                </ul>
-                                            <?php endif; ?>
-                                        <?php else:
-                                            $colors = $parts->accessories->colors;
-                                            if(!empty($capeacc->colors)) {
-                                                $colors = $capeacc->colors;
-                                            }
-                                        ?>
-                                            <span class="condensed"><?php echo $capeacc->name; ?><?php echo (!empty($capeacc->sex) ? ' <small>(' . ucfirst($capeacc->sex) . ' only)</small>' : ''); ?></span>
-                                            <ul>
-                                                <?php foreach($capeacc->colors as $color): ?>
-                                                    <?php if(is_string($color) || (!is_string($color) && empty($color->trims))):
-                                                            if(!is_string($color)) {
-                                                                $color = $color->name;
-                                                            }
-
-                                                            $slug      = preg_replace('/-(\d)/', '$1', str_replace(' ', '-', strtolower($color)));
-                                                            $file      = (!empty($capeacc->file) ? $capeacc->file : $slug . '_' . $short . '_%SEX%');
-                                                            $file      = str_replace('%COLOR%', $slug, $file);
-                                                            $file      = str_replace('%SHORT%', $short, $file);
-                                                            $filem     = str_replace('%SEX%', 'male', $file);
-                                                            $filef     = str_replace('%SEX%', 'female', $file);
-
-                                                            $sex       = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
-                                                            if(!empty($capeacc->sex)) {
-                                                                $files = str_replace('%SEX%', $capeacc->sex, $file);
-                                                                $paths = str_replace('%SEX%', $capeacc->sex, $path);
-                                                                $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
-                                                                $sex  .= ' data-required="sex=' . $capeacc->sex . '"';
-                                                            }
-                                                        ?>
-                                                        <li>
-                                                            <input type="radio" id="capeacc-<?php echo $short; ?>_<?php echo $slug; ?>" name="capeacc"<?php echo $sex; ?>>
-                                                            <label for="capeacc-<?php echo $short; ?>_<?php echo $slug; ?>"><?php echo $color; ?></label>
-                                                        </li>
-                                                    <?php else:
-                                                            foreach($color->trims as $trim):
-                                                                $slug      = preg_replace('/-(\d)/', '$1', str_replace(' ', '-', strtolower($color->name)));
-                                                                $file      = (!empty($capeacc->file) ? $capeacc->file : $slug . '_' . $short . '_%SEX%');
-                                                                $file      = str_replace('%COLOR%', $slug, $file);
-                                                                $file      = str_replace('%SHORT%', $short, $file);
-                                                                $file      = str_replace('%TRIM%', strtolower($trim), $file);
-                                                                $filem     = str_replace('%SEX%', 'male', $file);
-                                                                $filef     = str_replace('%SEX%', 'female', $file);
-
-                                                                $sex       = ' data-file_male="' . $pathm . '/' . $filem . '.png" data-file_female="' . $pathf . '/' . $filef . '.png"';
-                                                                if(!empty($capeacc->sex)) {
-                                                                    $files = str_replace('%SEX%', $capeacc->sex, $file);
-                                                                    $paths = str_replace('%SEX%', $capeacc->sex, $path);
-                                                                    $sex   = ' data-file="' . $paths . '/' . $files . '.png"';
-                                                                    $sex  .= ' data-required="sex=' . $capeacc->sex . '"';
-                                                                }
-                                                        ?>
-                                                            <li>
-                                                                <input type="radio" id="capeacc-<?php echo $short; ?>_<?php echo $slug; ?>" name="capeacc"<?php echo $sex; ?>>
-                                                                <label for="capeacc-<?php echo $short; ?>_<?php echo $slug; ?>"><?php echo $color->name; ?>, <?php echo $trim; ?> Trim</label>
-                                                            </li>
-                                                        <?php endforeach; ?>
-                                                    <?php endif; ?>
-                                                <?php endforeach; ?>
-                                            </ul>
-                                        <?php endif; ?>
-                                    </li>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                        </ul>
-                    </li>
+                    <?php output_general($parts->accessories->capeacc, 'accessories', 'Cape Neckpiece', 'capeacc', 'accessories/neck'); ?>
                     <li><span class="condensed">Weapon</span>
                         <ul>
                             <li>

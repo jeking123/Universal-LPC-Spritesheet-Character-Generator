@@ -5,11 +5,11 @@
 
 
     /**
-      * Output Body Type Listing
+      * Output General Type Listing
       *
       * @author JaidynReiman; May 2014
       */
-    function output_general($list, $name, $id, $base) {
+    function output_general($list, $parent, $name, $id, $base) {
         global $parts;
 
         if(!empty($list)): ?>
@@ -31,7 +31,7 @@
                             $pathf = str_replace('%SEX%', 'female', $path);
                         ?>
                         <li>
-                            <?php if((!empty($item->colors) && $item->colors == 'none') || (empty($parts->item->colors) && empty($item->colors))): ?>
+                            <?php if((!empty($item->colors) && $item->colors == 'none') || (empty($parts->$parent->colors) && empty($item->colors))): ?>
                                 <?php if(!empty($item->opts)): ?>
                                     <span class="condensed">
                                 <?php endif; ?>
@@ -83,8 +83,9 @@
                                         <?php endforeach; ?>
                                     </ul>
                                 <?php endif; ?>
-                            <?php else:
-                                $colors = $parts->item->colors;
+                            <?php else: ?>
+							<?php
+                                $colors = $parts->$parent->colors;
                                 if(!empty($item->colors)) {
                                     $colors = $item->colors;
                                 }
