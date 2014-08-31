@@ -60,7 +60,7 @@
                     <?php output_general($parts->clothes->vests, 'clothes', 'Vest', 'vest', 'torso/vest'); ?>
                     <?php output_general($parts->armor->chest, 'armor', 'Armor', 'armor', 'torso/chain'); ?>
                     <?php output_general($parts->armor->jacket, 'armor', 'Jacket', 'jacket', 'torso/chain'); ?>
-                    <?php output_general($parts->armor->arms, 'armor', 'Jacket', 'arms', 'torso'); ?>
+                    <?php output_general($parts->armor->arms, 'armor', 'Arms', 'arms', 'torso'); ?>
                     <?php output_general($parts->armor->shoulders, 'armor', 'Shoulders', 'shoulders', 'torso'); ?>
                     <?php output_general($parts->armor->spikes, 'armor', 'Spikes', 'shoulders', 'torso'); ?>
                     <?php output_general($parts->armor->bracers, 'armor', 'Bracers', 'bracers', 'hands/bracers'); ?>

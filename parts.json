@@ -733,15 +733,15 @@
         ],
         "arms": [
             {
-                "name": "Gold Chest",
-                "short": "chest_gold",
+                "name": "Gold Arms",
+                "short": "arms_gold",
                 "path": "torso/gold",
                 "fullpath": true,
                 "file": "arms_%SEX%"
             },
             {
-                "name": "Plate Chest",
-                "short": "chest_plate",
+                "name": "Plate Arms",
+                "short": "arms_plate",
                 "path": "torso/plate",
                 "fullpath": true,
                 "file": "arms_%SEX%"
