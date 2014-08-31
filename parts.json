@@ -750,7 +750,7 @@
         "greaves": [
             {
                 "name": "Metal Greaves",
-                "short": "metal_pants",
+                "short": "metal_greaves",
                 "path": "legs/armor/%SEX%",
                 "fullpath": true,
                 "file": "%SHORT%_%SEX%"
@@ -783,6 +783,7 @@
             {
                 "name": "Leather Shoulders",
                 "path": "torso/leather",
+				"short": "leather",
                 "fullpath": true,
                 "file": "shoulders_%SEX%"
             }

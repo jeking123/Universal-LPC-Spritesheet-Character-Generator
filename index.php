@@ -62,7 +62,7 @@
                     <?php output_general($parts->armor->jacket, 'armor', 'Jacket', 'jacket', 'torso/chain'); ?>
                     <?php output_general($parts->armor->arms, 'armor', 'Arms', 'arms', 'torso'); ?>
                     <?php output_general($parts->armor->shoulders, 'armor', 'Shoulders', 'shoulders', 'torso'); ?>
-                    <?php output_general($parts->armor->spikes, 'armor', 'Spikes', 'shoulders', 'torso'); ?>
+                    <?php output_general($parts->armor->spikes, 'armor', 'Spikes', 'spikes', 'torso'); ?>
                     <?php output_general($parts->armor->bracers, 'armor', 'Bracers', 'bracers', 'hands/bracers'); ?>
                     <?php output_general($parts->armor->greaves, 'armor', 'Greaves', 'greaves', 'legs/armor'); ?>
                     <?php output_general($parts->armor->gloves, 'armor', 'Gloves', 'gloves', 'hands/gloves'); ?>

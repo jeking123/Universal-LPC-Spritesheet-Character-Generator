@@ -14,7 +14,7 @@ $(document).ready(function() {
 
     // set params and redraw when any radio button or checkbox is clicked on
     $("input[type=radio], input[type=checkbox]").each(function() {
-        $(this).click(function() {
+        $(this).click(function(event) {
             setParams();
             redraw();
         });
@@ -52,7 +52,7 @@ $(document).ready(function() {
     // Do not do so twice, once on label then on input
     // Again, do not multiple toggle when clicking on children
     $("#chooser>ul>li>ul>li").click(function(event) {
-        if (!($(event.target).get(0).tagName == "LABEL")) {
+        if (!($(event.target).get(0).tagName === "LABEL")) {
             $(this).children("span").toggleClass("condensed").toggleClass("expanded");
             var $ul = $(this).children("ul");
             $ul.toggle('slow').promise().done(drawPreviews);
@@ -208,7 +208,7 @@ $(document).ready(function() {
             if (_.startsWith(id, "hair-")) {
                 var style = id.substring(5, id.indexOf("-", 5));
                 $("input[type=radio]:checked").filter(function() {
-                    return $(this).attr("id").substr(0, 5) == "body-";
+                    return $(this).attr("id").substr(0, 5) === "body-";
                 }).each(function() {
                     var hsMale = "hs_" + style + "_male";
                     var hsFemale = "hs_" + style + "_female";
@@ -305,7 +305,7 @@ $(document).ready(function() {
         $("input[type=radio]").each(function() {
             var words = _.words($(this).attr('id'), '-');
             var initial = _.initial(words).join('-');
-            $(this).prop("checked", $(this).attr("checked") || params[initial] == _.last(words));
+            $(this).prop("checked", $(this).attr("checked") || params[initial] === _.last(words));
         });
         $("input[type=checkbox]").each(function() {
             $(this).prop("checked", _.toBool(params[$(this).attr('id')]));
@@ -326,6 +326,7 @@ $(document).ready(function() {
                     _.toBool(params[$(this).attr('id')]) != $(this).prop("checked"))
                 params[$(this).attr('id')] = $(this).prop("checked") ? 1 : 0;
         });
+        settingParams = true;
         jHash.val(params);
     }
     
@@ -371,8 +372,9 @@ $(document).ready(function() {
     }
     
     // Draw now - on ready
+    settingParams = false;
     interpretParams();
-    if (Object.keys(params).length == 0) {
+    if (Object.keys(params).length === 0) {
         $("input[type=reset]").click();
         setParams();
     }
