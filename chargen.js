@@ -368,11 +368,13 @@ $(document).ready(function() {
 
     // Do not stop running all javascript if image not available
     function drawImage(ctx, img) {
-        try {
-            ctx.drawImage(img, 0, 0);
-        } catch(err) {
-            console.error("Error: could not find " + img.src);
-        }
+      ctx.drawImage(img, 0, 0);
+      
+        // try {
+        //     ctx.drawImage(img, 0, 0);
+        // } catch(err) {
+        //     console.error("Error: could not find " + img.src);
+        // }
     }
 
     // Draw now - on ready
